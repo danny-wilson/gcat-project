@@ -8,22 +8,29 @@
 # Macros
 #
 
+# Header file and library locations for xerces-c
+INCLUDE_XERCESC = /local/data/mmm/ana/Saur/wilson/xerces-c-3.1.1/src
+LPATH_XERCESC = /local/data/mmm/ana/Saur/wilson/xerces-c-3.1.1/src/.libs
+# Header file locations for gcat-project
+INCLUDE = -Isrc -Isrc/myutils -I$(INCLUDE_XERCESC)
+LPATH = $(LPATH_XERCESC)
+# C++ compiler
 CC = g++
+# C++ compiler for MPICH2
+MPICC = mpic++
+# C++ linker
 LD = g++
-CC_OPTIONS = -w -O3 -D __NOEXTERN_FOR_CINCLUDE
+# C++ standard compiler options
+CXXFLAGS = -w -O0 -g -D __NOEXTERN_FOR_CINCLUDE 
+# C++ compiler options for library code
+CC_OPTIONS = $(CXXFLAGS) -fPIC
+# C++ linker options
 #LNK_OPTIONS = -L/mnt/lustre/home/djw/xerces-c-3.0.1-x86_64-linux-gcc-3.4/lib\
 #		-L/usr/lib64/mpich2\
 #		-lxerces-c\
 #		-lgsl\
 #		-lgslcblas
-LNK_OPTIONS = -lxerces-c
-MPICC = mpic++
-
-#
-# INCLUDE directories for gcat-project
-#
-
-INCLUDE = -Isrc -Isrc/myutils
+LNK_OPTIONS = -L$(LPATH) -lxerces-c
 
 #
 # Build gcat-project
@@ -79,7 +86,10 @@ GCAT_CORE_OBJECTS = \
 		./SumTransform.o\
 		./TransformationsXML.o
 
-all : gcat-core.so
+all : libgcat-core.so gcat
+
+gcat : gcatmain.o
+	$(LD) $(LNK_OPTIONS) -L./ -lgcat-core -ldl gcatmain.o -o gcat
 
 #Mojito : main.o MCMC_XML.o $(OBJECTS)
 #	$(CC) $(LNK_OPTIONS) main.o MCMC_XML.o $(OBJECTS) -o Mojito
@@ -87,19 +97,21 @@ all : gcat-core.so
 #Mojito.mpi : mpimain.o MPIMoves.o MCMC_MPI_XML.o $(OBJECTS)
 #	$(MPICC) $(LNK_OPTIONS) -lmpich mpimain.o MPIMoves.o MCMC_MPI_XML.o $(OBJECTS) -o Mojito.mpi
 
-#clean : 
-#		rm main.o mpimain.o MPIMoves.o MCMC_XML.o MCMC_MPI_XML.o $(OBJECTS)
+clean : cleanobj
+	rm gcat libgcat-core.so
 
-#install : Mojito
-#		cp Mojito Mojito
+cleanobj :
+	rm gcatmain.o $(GCAT_CORE_OBJECTS)
 
-gcat-core.so : $(GCAT_CORE_OBJECTS)
-	$(LD) -shared $(LNK_OPTIONS) -lc $(GCAT_CORE_OBJECTS) -soname gcat-core.so
+#install : gcat
+#		cp gcat gcat
+
+libgcat-core.so : $(GCAT_CORE_OBJECTS)
+	$(LD) $(LNK_OPTIONS) -shared -o libgcat-core.so $(GCAT_CORE_OBJECTS)
 
 #
-# Build the parts of Mojito
+# Build the parts of gcat
 #
-
 
 ./Component.o : src/DAG/Component.cpp
 	$(CC) $(CC_OPTIONS) src/DAG/Component.cpp -c $(INCLUDE) -o ./Component.o
@@ -108,7 +120,7 @@ gcat-core.so : $(GCAT_CORE_OBJECTS)
 	$(CC) $(CC_OPTIONS) src/DAG/DAG.cpp -c $(INCLUDE) -o ./DAG.o
 
 ./DAGreadXML.o : src/DAG/DAGreadXML.cpp
-	$(CC) $(CC_OPTIONS) src/DAG/DAGXMLParser.cpp -c $(INCLUDE) -o ./DAGreadXML.o
+	$(CC) $(CC_OPTIONS) src/DAG/DAGreadXML.cpp -c $(INCLUDE) -o ./DAGreadXML.o
 
 ./DAGXMLParser.o : src/DAG/DAGXMLParser.cpp
 	$(CC) $(CC_OPTIONS) src/DAG/DAGXMLParser.cpp -c $(INCLUDE) -o ./DAGXMLParser.o
@@ -176,20 +188,23 @@ gcat-core.so : $(GCAT_CORE_OBJECTS)
 ./gcatLibrary.o : src/gcat/gcatLibrary.cpp
 	$(CC) $(CC_OPTIONS) src/gcat/gcatLibrary.cpp -c $(INCLUDE) -o ./gcatLibrary.o
 
-./ContinuousMosaicMoves.o : src/Inference/ContinuousMosaicMoves.cpp
-	$(CC) $(CC_OPTIONS) src/Inference/ContinuousMosaicMoves.cpp -c $(INCLUDE) -o ./ContinuousMosaicMoves.o
+./gcatmain.o : src/gcat/gcatmain.cpp
+	$(CC) $(CXXFLAGS) src/gcat/gcatmain.cpp -c $(INCLUDE) -o ./gcatmain.o
+
+./ContinuousMosaicMoves.o : src/Inference/MCMC/ContinuousMosaicMoves.cpp
+	$(CC) $(CC_OPTIONS) src/Inference/MCMC/ContinuousMosaicMoves.cpp -c $(INCLUDE) -o ./ContinuousMosaicMoves.o
 
 ./InferenceXML.o : src/Inference/InferenceXML.cpp
 	$(CC) $(CC_OPTIONS) src/Inference/InferenceXML.cpp -c $(INCLUDE) -o ./InferenceXML.o
 
-./MCMC.o : src/Inference/MCMC.cpp
-	$(CC) $(CC_OPTIONS) src/Inference/MCMC.cpp -c $(INCLUDE) -o ./MCMC.o
+./MCMC.o : src/Inference/MCMC/MCMC.cpp
+	$(CC) $(CC_OPTIONS) src/Inference/MCMC/MCMC.cpp -c $(INCLUDE) -o ./MCMC.o
 
-./MPIMoves.o : src/Inference/MPIMoves.cpp
-	$(CC) $(CC_OPTIONS) src/Inference/MPIMoves.cpp -c $(INCLUDE) -o ./MPIMoves.o
+./MPIMoves.o : src/Inference/MCMC/MPIMoves.cpp
+	$(CC) $(CC_OPTIONS) src/Inference/MCMC/MPIMoves.cpp -c $(INCLUDE) -o ./MPIMoves.o
 
-./PowellML.o : src/Inference/PowellML.cpp
-	$(CC) $(CC_OPTIONS) src/Inference/PowellML.cpp -c $(INCLUDE) -o ./PowellML.o
+./PowellML.o : src/Inference/ML/PowellML.cpp
+	$(CC) $(CC_OPTIONS) src/Inference/ML/PowellML.cpp -c $(INCLUDE) -o ./PowellML.o
 
 ./Continuous.o : src/RandomVariables/Continuous.cpp
 	$(CC) $(CC_OPTIONS) src/RandomVariables/Continuous.cpp -c $(INCLUDE) -o ./Continuous.o
@@ -207,10 +222,10 @@ gcat-core.so : $(GCAT_CORE_OBJECTS)
 	$(CC) $(CC_OPTIONS) src/RandomVariables/RandomVariablesXML.cpp -c $(INCLUDE) -o ./RandomVariablesXML.o
 
 ./AbsoluteTransform.o : src/Transformations/AbsoluteTransform.cpp
-	$(CC) $(CC_OPTIONS) : src/Transformations/AbsoluteTransform.cpp -c $(INCLUDE) -o ./AbsoluteTransform.o
+	$(CC) $(CC_OPTIONS) src/Transformations/AbsoluteTransform.cpp -c $(INCLUDE) -o ./AbsoluteTransform.o
 
 ./Concatenate.o : src/Transformations/Concatenate.cpp
-	$(CC) $(CC_OPTIONS) : src/Transformations/Concatenate.cpp -c $(INCLUDE) -o ./Concatenate.o
+	$(CC) $(CC_OPTIONS) src/Transformations/Concatenate.cpp -c $(INCLUDE) -o ./Concatenate.o
 
 ./ContinuousMosaicNumBlocks.o : src/Transformations/ContinuousMosaicNumBlocks.cpp
 	$(CC) $(CC_OPTIONS) src/Transformations/ContinuousMosaicNumBlocks.cpp -c $(INCLUDE) -o ./ContinuousMosaicNumBlocks.o
