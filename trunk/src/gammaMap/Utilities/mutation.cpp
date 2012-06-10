@@ -26,6 +26,9 @@ extern "C" {
 #include <gammaMap/Utilities/paml.h>
 }
 #endif
+#include <limits>
+
+using std::numeric_limits;
 
 void Mutation_Matrix::initialize(const int n_states_in, Matrix<double> *C_in) {
 	n_states = n_states_in;
