@@ -21,7 +21,9 @@
 #include <DAG/DAGXMLParser.h>
 #include <time.h>
 #include <Inference/MCMC/Moves.h>
+#ifdef _MPI_WILL_BE_LINKED
 #include <Inference/MCMC/MPIMoves.h>
+#endif // _MPI_WILL_BE_LINKED
 #include <Inference/MCMC/ContinuousMosaicMoves.h>
 #include <iostream>
 #include <Inference/ML/PowellML.h>

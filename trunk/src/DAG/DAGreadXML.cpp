@@ -170,16 +170,18 @@ void DAG::readXML_chameleon(const char* xmlfile) {
 	
 	// Create a temporary sub-directory
 	string tmpdir = wdir + "/gcat.tmp.XXXXXX";
-	char ctmpdir[tmpdir.size()];
-	strlcpy(ctmpdir,tmpdir.c_str(),tmpdir.size());
+	char ctmpdir[tmpdir.size()+1];
+	int i;
+	for(i=0;i<tmpdir.size();i++) ctmpdir[i] = tmpdir[i];
+	ctmpdir[tmpdir.size()] = '\0';
+	//strlcpy(ctmpdir,tmpdir.c_str(),tmpdir.size());
 	char* rtmpdir = mkdtemp(ctmpdir);
 	if(rtmpdir==NULL) {
 		string errMsg = "Could not create temporary directory ";
 		errMsg += tmpdir + ". " + strerror(errno);
 		error(errMsg.c_str());
 	}
-	int i;
-	for(int i=0;i<tmpdir.size();i++) tmpdir[i] = rtmpdir[i];
+	for(i=0;i<tmpdir.size();i++) tmpdir[i] = rtmpdir[i];
 	
 	// Write chameleon schemas to temporary directory
 	vector<string> schema_fname(0);
@@ -260,16 +262,18 @@ void DAG::readXML_libraries(const char* xmlfile) {
 	
 	// Create a temporary sub-directory
 	string tmpdir = wdir + "/gcat.tmp.XXXXXX";
-	char ctmpdir[tmpdir.size()];
-	strlcpy(ctmpdir,tmpdir.c_str(),tmpdir.size());
+	char ctmpdir[tmpdir.size()+1];
+	int i;
+	for(i=0;i<tmpdir.size();i++) ctmpdir[i] = tmpdir[i];
+	ctmpdir[tmpdir.size()] = '\0';
+	//strlcpy(ctmpdir,tmpdir.c_str(),tmpdir.size());
 	char* rtmpdir = mkdtemp(ctmpdir);
 	if(rtmpdir==NULL) {
 		string errMsg = "Could not create temporary directory ";
 		errMsg += tmpdir + ". " + strerror(errno);
 		error(errMsg.c_str());
 	}
-	int i;
-	for(int i=0;i<tmpdir.size();i++) tmpdir[i] = rtmpdir[i];
+	for(i=0;i<tmpdir.size();i++) tmpdir[i] = rtmpdir[i];
 	
 	// Write skeleton schema to temporary directory
 	ostringstream skeletonfilename;
