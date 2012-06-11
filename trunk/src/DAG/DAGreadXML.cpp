@@ -406,7 +406,9 @@ xsd_string load_library(const char* filename) {
 	if(!handle) {
 		string errMsg = "load_library(): Error when loading library: ";
 		errMsg += filename;
-		errMsg += ". Could not open dynamic library";
+		errMsg += ". Could not open dynamic library.\n";
+		const char* dlerrMsg = dlerror();
+		errMsg += dlerrMsg;
 		error(errMsg.c_str());
 	}
 	xsd_string (*f)() = (xsd_string (*)()) dlsym(handle,"load_gcat_library");

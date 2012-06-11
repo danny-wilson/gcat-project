@@ -8,15 +8,8 @@
 # Macros
 #
 
-# Header file and library locations for xerces-c
-INCLUDE_XERCESC = /local/data/mmm/ana/Saur/wilson/xerces-c-3.1.1/src
-LPATH_XERCESC = /local/data/mmm/ana/Saur/wilson/xerces-c-3.1.1/src/.libs
-# Header file and library locations for GSL
-INCLUDE_GSL = /local/data/mmm/ana/Saur/wilson/gsl-1.15
-LPATH_GSL = /local/data/mmm/ana/Saur/wilson/gsl-1.15/.libs
 # Header file locations for gcat-project
-INCLUDE = -Isrc -Isrc/myutils -I$(INCLUDE_XERCESC)
-LPATH = $(LPATH_XERCESC)
+INCLUDE = -Isrc -Isrc/myutils
 # C++ compiler
 CC = g++
 # C++ compiler for MPICH2
@@ -24,7 +17,7 @@ MPICC = mpic++
 # C++ linker
 LD = g++
 # C++ standard compiler options
-CXXFLAGS = -w -O0 -g -D __NOEXTERN_FOR_CINCLUDE 
+CXXFLAGS = -Wall -w -O0 -g -D __NOEXTERN_FOR_CINCLUDE 
 # C++ compiler options for gcat library code
 CC_OPTIONS = $(CXXFLAGS) -fPIC
 # C++ linker options
@@ -33,7 +26,7 @@ CC_OPTIONS = $(CXXFLAGS) -fPIC
 #		-lxerces-c\
 #		-lgsl\
 #		-lgslcblas
-LNK_OPTIONS = -L$(LPATH) -lxerces-c
+LNK_OPTIONS = -lxerces-c
 
 #
 # Build gcat-project
@@ -104,7 +97,7 @@ LIB_GAMMAMAP_OBJECTS = \
 all : libgammaMap.so libgcat-core.so gcat
 
 gcat : gcatmain.o
-	$(LD) $(LNK_OPTIONS) -L./ -lgcat-core -ldl gcatmain.o -o gcat
+	$(LD) $(LNK_OPTIONS) -L./ -lgcat-core -ldl -rdynamic gcatmain.o -o gcat
 
 #gcat.mpi : mpimain.o MPIMoves.o MCMC_MPI_XML.o $(OBJECTS)
 #	$(MPICC) $(LNK_OPTIONS) -lmpich mpimain.o MPIMoves.o MCMC_MPI_XML.o $(OBJECTS) -o gcat.mpi
@@ -121,8 +114,8 @@ cleanobj :
 libgcat-core.so : $(GCAT_CORE_OBJECTS)
 	$(LD) $(LNK_OPTIONS) -shared -o libgcat-core.so $(GCAT_CORE_OBJECTS)
 
-libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS)
-	$(LD) $(LNK_OPTIONS) -L$(LPATH_GSL) -lgsl -shared -o libgammaMap.so $(LIB_GAMMAMAP_OBJECTS)
+libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
+	$(LD) $(LNK_OPTIONS) -lgsl -L/home/wilson/svn/gcat-project/ -lgcat-core -shared -o libgammaMap.so $(LIB_GAMMAMAP_OBJECTS)
 
 #
 # Build the parts of gcat
@@ -293,7 +286,7 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS)
 	$(CC) $(CC_OPTIONS) src/gammaMap/Distributions/Codon61SequenceStationaryDistribution.cpp -c $(INCLUDE) -o ./Codon61SequenceStationaryDistribution.o
 
 ./gammaMapHMMHybrid.o : src/gammaMap/Distributions/gammaMapHMMHybrid.cpp
-	$(CC) $(CC_OPTIONS) src/gammaMap/Distributions/gammaMapHMMHybrid.cpp -c $(INCLUDE) -I$(INCLUDE_GSL) -o ./gammaMapHMMHybrid.o
+	$(CC) $(CC_OPTIONS) src/gammaMap/Distributions/gammaMapHMMHybrid.cpp -c $(INCLUDE) -o ./gammaMapHMMHybrid.o
 
 ./gammaMapLibrary.o : src/gammaMap/gammaMapLibrary.cpp
 	$(CC) $(CC_OPTIONS) src/gammaMap/gammaMapLibrary.cpp -c $(INCLUDE) -o ./gammaMapLibrary.o
@@ -305,10 +298,10 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS)
 	$(CC) $(CC_OPTIONS) src/gammaMap/Inference/MCMC/gammaMapMoves.cpp -c $(INCLUDE) -o ./gammaMapMoves.o
 
 ./gammaMapUtils.o : src/gammaMap/Utilities/gammaMapUtils.cpp
-	$(CC) $(CC_OPTIONS) src/gammaMap/Utilities/gammaMapUtils.cpp -c $(INCLUDE) -I$(INCLUDE_GSL) -o ./gammaMapUtils.o
+	$(CC) $(CC_OPTIONS) src/gammaMap/Utilities/gammaMapUtils.cpp -c $(INCLUDE) -o ./gammaMapUtils.o
 
 ./gammaMapXML.o : src/gammaMap/gammaMapXML.cpp
-	$(CC) $(CC_OPTIONS) src/gammaMap/gammaMapXML.cpp -c $(INCLUDE) -I$(INCLUDE_GSL) -o ./gammaMapXML.o
+	$(CC) $(CC_OPTIONS) src/gammaMap/gammaMapXML.cpp -c $(INCLUDE) -o ./gammaMapXML.o
 
 ./mutation.o : src/gammaMap/Utilities/mutation.cpp
 	$(CC) $(CC_OPTIONS) src/gammaMap/Utilities/mutation.cpp -c $(INCLUDE) -o ./mutation.o
