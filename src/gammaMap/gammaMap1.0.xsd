@@ -1,0 +1,69 @@
+<?xml version="1.1"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<!-- Data -->
+	<xs:element name="codon_count" substitutionGroup="abstract_data">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="distribution" type="xs:string" default=""/>
+			<xs:attribute name="file" type="xs:string" use="required"/>
+			<xs:attribute name="format" type="xs:string" default="fasta"/>
+			<xs:attribute name="encoding" type="xs:string" default="codon61"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Parameters -->
+	<xs:element name="codon_sequence" substitutionGroup="abstract_parameter">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="string_list">
+					<xs:attribute name="id" type="xs:string" use="required"/>
+					<xs:attribute name="distribution" type="xs:string" default=""/>
+					<xs:attribute name="encoding" type="xs:string" default="codon61"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Transformations -->
+	<xs:element name="gammaMapHMMHybrid_path_sampler" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="distribution" type="xs:string" use="required"/>
+			<xs:attribute name="rv" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Distributions -->
+	<xs:element name="codon61_sequence_stationary_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="pi" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="gammaMapHMMHybrid" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="anc" type="xs:string" use="required"/>
+			<xs:attribute name="theta" type="xs:string" use="required"/>
+			<xs:attribute name="kappa" type="xs:string" use="required"/>
+			<xs:attribute name="gamma1" type="xs:string" use="required"/>
+			<xs:attribute name="gamma2" type="xs:string" use="required"/>
+			<xs:attribute name="T" type="xs:string" use="required"/>
+			<xs:attribute name="p" type="xs:string" use="required"/>
+			<xs:attribute name="pi" type="xs:string" use="required"/>
+			<xs:attribute name="gamma1_wt" type="xs:string" default="1"/>
+			<xs:attribute name="gamma2_wt" type="xs:string" default="1"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- MCMC -->
+	<xs:element name="codon61_sequence_gibbs_sampler" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
