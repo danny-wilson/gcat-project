@@ -285,6 +285,9 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 ./Codon61SequenceStationaryDistribution.o : src/gammaMap/Distributions/Codon61SequenceStationaryDistribution.cpp
 	$(CC) $(CC_OPTIONS) src/gammaMap/Distributions/Codon61SequenceStationaryDistribution.cpp -c $(INCLUDE) -o ./Codon61SequenceStationaryDistribution.o
 
+src/gammaMap/gammaMap1.0.xsd.h : src/gammaMap/gammaMap1.0.xsd
+	xxd -i src/gammaMap/gammaMap1.0.xsd > src/gammaMap/gammaMap1.0.xsd.h
+
 ./gammaMapHMMHybrid.o : src/gammaMap/Distributions/gammaMapHMMHybrid.cpp
 	$(CC) $(CC_OPTIONS) src/gammaMap/Distributions/gammaMapHMMHybrid.cpp -c $(INCLUDE) -o ./gammaMapHMMHybrid.o
 
@@ -300,7 +303,7 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 ./gammaMapUtils.o : src/gammaMap/Utilities/gammaMapUtils.cpp
 	$(CC) $(CC_OPTIONS) src/gammaMap/Utilities/gammaMapUtils.cpp -c $(INCLUDE) -o ./gammaMapUtils.o
 
-./gammaMapXML.o : src/gammaMap/gammaMapXML.cpp
+./gammaMapXML.o : src/gammaMap/gammaMapXML.cpp src/gammaMap/gammaMap1.0.xsd.h
 	$(CC) $(CC_OPTIONS) src/gammaMap/gammaMapXML.cpp -c $(INCLUDE) -o ./gammaMapXML.o
 
 ./mutation.o : src/gammaMap/Utilities/mutation.cpp

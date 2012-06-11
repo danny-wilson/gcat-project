@@ -1,0 +1,597 @@
+<?xml version="1.1"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<!-- Define libraries -->
+	<xs:element name="library">
+		<xs:complexType>
+			<xs:attribute name="file" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="libraries_type">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="library"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="libraries" type="libraries_type"/>
+
+	<!-- Define abstract data element -->
+	<xs:element name="abstract_data" abstract="true"/>
+	<!-- Define parameters to be a specific type of data. Elements deriving from abstract_data but
+		 not abstract_parameter come under the data element but not the parameters element.         -->
+	<xs:element name="abstract_parameter" abstract="true" substitutionGroup="abstract_data"/>
+	<!-- Define concrete data and parameters -->
+	<xs:simpleType name="string_list">
+		<xs:list itemType="xs:string"/>
+	</xs:simpleType>
+
+	<xs:element name="continuous_scalar" substitutionGroup="abstract_parameter">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="distribution" type="xs:string" default=""/>
+			<xs:attribute name="value" type="xs:decimal" default="0"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_mosaic" substitutionGroup="abstract_parameter">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="distribution" type="xs:string" default=""/>
+			<xs:attribute name="length" type="xs:string" use="required"/>
+			<xs:attribute name="boundaries" type="xs:string" default=""/>
+			<xs:attribute name="values" type="xs:string" default=""/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="discrete_scalar" substitutionGroup="abstract_parameter">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="distribution" type="xs:string" default=""/>
+			<xs:attribute name="value" type="xs:integer" default="0"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:simpleType name="decimal_list">
+		<xs:list itemType="xs:decimal"/>
+	</xs:simpleType>
+
+	<xs:complexType name="continuous_vector_type">
+		<xs:simpleContent>
+			<xs:extension base="decimal_list">
+				<xs:attribute name="id" type="xs:string" use="required"/>
+				<xs:attribute name="distribution" type="xs:string" default=""/>
+				<xs:attribute name="length" type="xs:string" default=""/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:element name="iid_continuous_scalar" type="continuous_vector_type" substitutionGroup="abstract_data"/>
+	<xs:element name="continuous_vector" type="continuous_vector_type" substitutionGroup="abstract_parameter"/>
+
+	<xs:simpleType name="integer_list">
+		<xs:list itemType="xs:integer"/>
+	</xs:simpleType>
+
+	<xs:element name="iid_discrete_scalar" substitutionGroup="abstract_data">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="integer_list">
+					<xs:attribute name="id" type="xs:string" use="required"/>
+					<xs:attribute name="distribution" type="xs:string" default=""/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="parameter_variables">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="abstract_parameter"/>
+		</xs:choice>
+	</xs:complexType>
+	
+	<xs:complexType name="data_variables">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="abstract_data"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:element name="data" type="data_variables"/>
+	<xs:element name="parameters" type="parameter_variables"/>
+
+	<!--- Define abstract conversion/transformation element -->
+	<xs:element name="abstract_transformation" abstract="true"/>
+	<!-- Define concrete conversions -->
+	<xs:element name="to_continuous_mosaic" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="x" type="xs:string" use="required"/>
+			<xs:attribute name="length" type="xs:string" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="to_continuous_vector" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="x" type="xs:string" use="required"/>
+			<xs:attribute name="length" type="xs:string" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!--- Define concrete transformations -->
+
+	<xs:element name="abs_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="x" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="concatenate" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:string" use="required"/>
+					<xs:attribute name="length" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="continuous_mosaic_num_blocks" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="continuous_mosaic" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_vector_element" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="vector" type="xs:string" use="required"/>
+			<xs:attribute name="element" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="exp_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="exponent" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="exponential_quantile_function_vector" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="lambda" type="xs:string" default="1"/>
+			<xs:attribute name="quantile" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="fraction_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="numerator" type="xs:string" use="required"/>
+			<xs:attribute name="denominator" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="inverse_logit_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="p" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="linear_mosaic_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="mean" type="xs:string" default="0"/>
+			<xs:attribute name="sd" type="xs:string" default="1"/>
+			<xs:attribute name="z" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="log_likelihood_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="rv" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="power_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="base" type="xs:string" use="required"/>
+			<xs:attribute name="exponent" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="product_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="proportion_transformation" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="u" type="xs:string" use="required"/>
+			<xs:attribute name="v" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="sum_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="transformations">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="abstract_transformation"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<!--- Define abstract distribution element -->
+	<xs:element name="abstract_distribution" abstract="true"/>
+	
+	<!--- Define concrete distributions -->
+	<xs:element name="binomial_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="N" type="xs:string" use="required"/>
+			<xs:attribute name="p" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="beta_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="a" type="xs:string" use="required"/>
+			<xs:attribute name="b" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_mosaic_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="p" type="xs:string" use="required"/>
+			<xs:attribute name="marginal" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_mosaic_beta_mixture_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="a" type="xs:string" use="required"/>
+			<xs:attribute name="b" type="xs:string" use="required"/>
+			<xs:attribute name="marginal" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_mixture" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="p" type="xs:string" use="required"/>
+			<xs:attribute name="distribution0" type="xs:string" use="required"/>
+			<xs:attribute name="distribution1" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="gamma_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="shape" type="xs:string" use="required"/>
+			<xs:attribute name="scale" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="improper_beta_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="a" type="xs:double" default="0.0"/>
+			<xs:attribute name="b" type="xs:double" default="0.0"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="improper_log_uniform_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="improper_uniform_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="inverse_gamma_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="shape" type="xs:string" use="required"/>
+			<xs:attribute name="scale" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="log_normal_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="mean" type="xs:string" default="0.0"/>
+			<xs:attribute name="sd" type="xs:string" default="1.0"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="log_uniform_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="min" type="xs:string" use="required"/>
+			<xs:attribute name="max" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="normal_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="mean" type="xs:string" default="0.0"/>
+			<xs:attribute name="sd" type="xs:string" default="1.0"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="uniform_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="min" type="xs:string" default="0.0"/>
+			<xs:attribute name="max" type="xs:string" default="1.0"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="distributions">
+		<xs:complexType>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="abstract_distribution"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+
+	<!--- Define abstract MCMC element -->
+	<xs:element name="abstract_MCMC" abstract="true"/>
+
+	<!-- Define concrete MCMC elements -->
+	<xs:element name="continuous_mosaic_extend_block" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="mean_extension" type="xs:decimal" default="1.2"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_mosaic_log_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_mosaic_splitmerge_block" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="p" type="xs:decimal" use="required"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+			<xs:attribute name="mean_type" type="xs:string" default="arithmetic"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_mosaic_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="log_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="logit_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="mpi_adaptive_metropolis" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="parameters" type="xs:string"/>
+				<xs:element name="C0" type="xs:string"/>
+			</xs:sequence>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+			<xs:attribute name="handshake" type="xs:integer" use="required"/>
+			<xs:attribute name="epsilon" type="xs:decimal" use="required"/>
+			<xs:attribute name="t0" type="xs:decimal" use="required"/>
+			<xs:attribute name="denom" type="xs:decimal" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mpi_adaptive_metropolis_within_gibbs" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="delta" type="xs:decimal" default="0.01"/>
+			<xs:attribute name="batchsize" type="xs:decimal" default="50"/>
+			<xs:attribute name="sd" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+			<xs:attribute name="handshake" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mpi_log_normal_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="sd" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+			<xs:attribute name="handshake" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mpi_log_normal_sync_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="string_list">
+					<xs:attribute name="sd" type="xs:decimal" default="1"/>
+					<xs:attribute name="weight" type="xs:decimal" default="1"/>
+					<xs:attribute name="handshake" type="xs:integer" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mpi_log_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+			<xs:attribute name="handshake" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mpi_logit_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+			<xs:attribute name="handshake" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mpi_switch_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="string_list">
+					<xs:attribute name="weight" type="xs:decimal" default="1"/>
+					<xs:attribute name="handshake" type="xs:integer" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mpi_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+			<xs:attribute name="handshake" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Define abstract log element -->
+	<xs:element name="abstract_log" abstract="true"/>
+	<!-- Define concrete log elements -->
+	<xs:element name="parameter" substitutionGroup="abstract_log">
+		<xs:complexType>
+			<xs:attribute name="idref" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="loglikelihood" substitutionGroup="abstract_log">
+		<xs:complexType>
+			<xs:attribute name="idref" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="log_elements">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="abstract_log"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:element name="log">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="log_elements">
+					<xs:attribute name="file" type="xs:string" use="required"/>
+					<xs:attribute name="burnin" type="xs:integer" default="0"/>
+					<xs:attribute name="thinning" type="xs:integer" use="required"/>
+					<xs:attribute name="record-iter" type="xs:boolean" default="true"/>
+					<xs:attribute name="record-move" type="xs:boolean" default="false"/>
+					<xs:attribute name="record-proposals" type="xs:boolean" default="false"/>
+					<xs:attribute name="separator" type="xs:string" default="tab"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Define abstract inference element -->
+	<xs:element name="abstract_inference" abstract="true"/>
+	<!-- Define concrete inference elements -->
+	<xs:complexType name="mcmc_elements">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="abstract_MCMC"/>
+			<xs:element ref="log" minOccurs="1"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:element name="mcmc" substitutionGroup="abstract_inference">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="mcmc_elements">
+					<xs:attribute name="niter" type="xs:positiveInteger" use="required"/>
+					<xs:attribute name="seed" type="xs:string" default="timer"/>
+					<xs:attribute name="screen_update" type="xs:double" default="0"/>
+					<xs:attribute name="random_sweep" type="xs:string" default="true"/>
+					<xs:attribute name="performance_interval" type="xs:nonNegativeInteger" default="0"/>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="powell_type">
+		<xs:simpleContent>
+			<xs:extension base="string_list">
+				<xs:attribute name="screen_update" type="xs:double" default="0"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:element name="powell" type="powell_type" substitutionGroup="abstract_inference"/>
+
+	<!-- Define gcat -->
+	<xs:element name="gcat">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="libraries" minOccurs="0"/>
+				<xs:element ref="data"/>
+				<xs:element ref="parameters"/>
+				<xs:element ref="transformations" minOccurs="0"/>
+				<xs:element ref="distributions"/>
+				<xs:choice>
+					<xs:element ref="abstract_inference"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+

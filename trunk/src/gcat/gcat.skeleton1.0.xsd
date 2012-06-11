@@ -1,0 +1,30 @@
+<?xml version="1.1"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://www.danielwilson.me.uk/gcat"
+xmlns="http://www.danielwilson.me.uk/gcat"
+elementFormDefault="qualified">
+	<!-- Define library -->
+	<xs:element name="library">
+		<xs:complexType>
+			<xs:attribute name="file" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Define libraries -->
+	<xs:complexType name="libraries_type">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element ref="library"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="libraries" type="libraries_type"/>
+	<!-- Define gcat -->
+	<xs:element name="gcat">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="libraries" minOccurs="0"/>
+				<xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+
