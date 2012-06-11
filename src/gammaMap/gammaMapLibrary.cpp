@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with the gammaMap library. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <gammaMap/gammaMapXML.h>
+#include <gammaMap/gammaMapLibrary.h>
 
 extern "C" {
 	gcat::xsd_string load_gcat_library() {

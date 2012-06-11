@@ -19,6 +19,7 @@
 #ifndef _GAMMAMAP_LIBRARY_H_
 #define _GAMMAMAP_LIBRARY_H_
 #include <DAG/DAG.h>
+#include <gammaMap/gammaMapXML.h>
 
 // Standard name that gcat looks for when loading the dynamic library
 extern "C" gcat::xsd_string load_gcat_library();
