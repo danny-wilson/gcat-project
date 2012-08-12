@@ -26,7 +26,7 @@ CC_OPTIONS = $(CXXFLAGS) -fPIC
 #		-lxerces-c\
 #		-lgsl\
 #		-lgslcblas
-LNK_OPTIONS = -lxerces-c
+LNK_OPTIONS = -lxerces-c -L./
 
 #
 # Build gcat-project
