@@ -251,6 +251,23 @@ void DAG::readXML_chameleon(const char* xmlfile) {
 		}
 		error(errMsg.c_str());
 	}
+	string errMsg = "";
+	// Remove the temporary files                                                                                                                                     
+	if(remove(xsd_file.c_str())!=0) {
+	  errMsg += "Could not delete temporary file ";
+	  errMsg += xsd_file + ". " + strerror(errno);
+	}
+	for(i=0;i<_chameleon.size();i++) {
+	  if(remove(schema_fname[i].c_str())!=0) {
+	    errMsg += "Could not delete temporary file ";
+	    errMsg += schema_fname[i] + ". " + strerror(errno);
+	  }
+	}
+	if(rmdir(tmpdir.c_str())!=0) {
+	  errMsg += "Could not delete temporary directory ";
+	  errMsg += tmpdir + ". " + strerror(errno);
+	}
+	if(errMsg!="") error(errMsg.c_str());
 }
 
 void DAG::readXML_libraries(const char* xmlfile) {
@@ -388,6 +405,27 @@ void DAG::readXML_libraries(const char* xmlfile) {
 		}
 		error(errMsg.c_str());
 	}
+	string errMsg = "";
+	// Remove the temporary files                                                                                                                                     
+	if(remove(skeletonfilename.str().c_str())!=0) {
+	  errMsg += "Could not delete temporary file ";
+	  errMsg += skeletonfilename.str() + ". " + strerror(errno);
+	}
+	if(remove(xsd_file.c_str())!=0) {
+	  errMsg += "Could not delete temporary file ";
+	  errMsg += xsd_file + ". " + strerror(errno);
+	}
+	for(i=0;i<_chameleon.size();i++) {
+	  if(remove(schema_fname[i].c_str())!=0) {
+	    errMsg += "Could not delete temporary file ";
+	    errMsg += schema_fname[i] + ". " + strerror(errno);
+	  }
+	}
+	if(rmdir(tmpdir.c_str())!=0) {
+	  errMsg += "Could not delete temporary directory ";
+	  errMsg += tmpdir + ". " + strerror(errno);
+	}
+	if(errMsg!="") error(errMsg.c_str());
 }
 
 // Set the root element
