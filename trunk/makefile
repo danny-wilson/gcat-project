@@ -286,7 +286,7 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 	$(CC) $(CC_OPTIONS) src/gammaMap/Distributions/Codon61SequenceStationaryDistribution.cpp -c $(INCLUDE) -o ./Codon61SequenceStationaryDistribution.o
 
 src/gammaMap/gammaMap1.0.xsd.h : src/gammaMap/gammaMap1.0.xsd
-	xxd -i src/gammaMap/gammaMap1.0.xsd > src/gammaMap/gammaMap1.0.xsd.h
+	(cd src/gammaMap && xxd -i gammaMap1.0.xsd > gammaMap1.0.xsd.h)
 
 ./gammaMapHMMHybrid.o : src/gammaMap/Distributions/gammaMapHMMHybrid.cpp
 	$(CC) $(CC_OPTIONS) src/gammaMap/Distributions/gammaMapHMMHybrid.cpp -c $(INCLUDE) -o ./gammaMapHMMHybrid.o
