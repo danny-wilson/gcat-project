@@ -115,7 +115,7 @@ libgcat-core.so : $(GCAT_CORE_OBJECTS)
 	$(LD) $(LNK_OPTIONS) -shared -o libgcat-core.so $(GCAT_CORE_OBJECTS)
 
 libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
-	$(LD) $(LNK_OPTIONS) -lgsl -L/home/wilson/svn/gcat-project/ -lgcat-core -shared -o libgammaMap.so $(LIB_GAMMAMAP_OBJECTS)
+	$(LD) $(LNK_OPTIONS) -lgsl -lgcat-core -shared -o libgammaMap.so $(LIB_GAMMAMAP_OBJECTS)
 
 #
 # Build the parts of gcat
