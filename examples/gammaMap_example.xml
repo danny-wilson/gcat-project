@@ -1,0 +1,292 @@
+<?xml version="1.1"?>
+<!-- In this version, point estimates for the parameters estimated from Peter Andolfatto's X-linked data are used -->
+<!-- Things to change:
+    1. Path for mojito1.0.xsd XML schema (see the myxml tag)
+    2. File names for FASTA files containing sequences of D. melanogaster (dmel), D. mauritiana (dmau) and D. yakuba (dyak) (see the codon_count tags)
+    3. Initial ancestral codon sequence (ideally a consensus sequence or just pick an observed sequence at random from any species) (see the codon_sequence tag)
+    4. File names for MCMC output (see both the <log> tags)
+-->
+<gcat xmlns="http://www.danielwilson.me.uk/gcat">
+       <libraries>
+         <library file="/home/wilson/svn/gcat-project/libgammaMap.so"/>
+       </libraries>
+
+       <data>
+		<codon_count id="dmel" distribution="dmel~" file="/home/wilson/svn/gcat-project/example/exon.9F2_CG1691.mel.fa"/>
+		<codon_count id="dmau" distribution="dmau~" file="/home/wilson/svn/gcat-project/example/exon.9F2_CG1691.sim.fa"/>
+		<codon_count id="dyak" distribution="dyak~" file="/home/wilson/svn/gcat-project/example/exon.9F2_CG1691.yak.fa"/>
+        <continuous_vector id="gamma" length="11">
+            -100 -50 -10 -5 -1 0 1 5 10 50 100
+        </continuous_vector>
+        <continuous_vector id="gamma_lethal" length="1">
+            -500
+        </continuous_vector>
+		<continuous_vector id="pi">
+			0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508 0.0163934426229508
+		</continuous_vector>
+	</data>
+
+	<parameters>
+		<!-- shared -->
+		<!-- ancestral sequence -->
+		<codon_sequence id="anc" distribution="anc~">
+			ATG ATC TTC GAG AAG ATG CGC GAA GAA GGC TTC ATG TGT GGC ACG GAC GAT GTG CGC CTC ACG GTT GAG TTG CTT GTG GCC AGC TCT CAG GTG GGC CGT ATC ATT GGC AAG GGT GGC CAA AAT GTG CGG GAA TTG CAG CGC GTG ACG GGC AGT GTG ATC AAG TTG CCC GAA CAT GCC CTT GCA CCG CCA TCC GGC GGA GAT GAA GAG ACT CCA GTG CAC ATC ATC GGA CTA TTC TAC AGT GTA CAG TCT GCC CAG CGA CGC ATC CGA GCC ATG ATG CTT TCG ACA AAT CCG CCG
+		</codon_sequence>        
+
+        <!-- species-specific distribution across exons -->
+        <continuous_scalar id="w0_-500" distribution="w0_-500~" value="0.77744665"/>
+        <continuous_scalar id="w0_-100" distribution="w0_-100~" value="0.019779793"/>
+        <continuous_scalar id="w0_-50" distribution="w0_-50~" value="0.000805624"/>
+        <continuous_scalar id="w0_-10" distribution="w0_-10~" value="0.000130344"/>
+        <continuous_scalar id="w0_-5" distribution="w0_-5~" value="0.000141461"/>
+        <continuous_scalar id="w0_-1" distribution="w0_-1~" value="0.00167126"/>
+        <continuous_scalar id="w0_0" distribution="w0_0~" value="0.000909282"/>
+        <continuous_scalar id="w0_1" distribution="w0_1~" value="0.000624556"/>
+        <continuous_scalar id="w0_5" distribution="w0_5~" value="0.000669248"/>
+        <continuous_scalar id="w0_10" distribution="w0_10~" value="0.001213208"/>
+        <continuous_scalar id="w0_50" distribution="w0_50~" value="0.0000449"/>
+        <continuous_scalar id="w0_100" distribution="w0_100~" value="0.0000365"/>
+
+        <continuous_scalar id="w1_-500" distribution="w1_-500~" value="0.657494051"/>
+        <continuous_scalar id="w1_-100" distribution="w1_-100~" value="0.087000184"/>
+        <continuous_scalar id="w1_-50" distribution="w1_-50~" value="0.001787899"/>
+        <continuous_scalar id="w1_-10" distribution="w1_-10~" value="0.000794589"/>
+        <continuous_scalar id="w1_-5" distribution="w1_-5~" value="0.000193176"/>
+        <continuous_scalar id="w1_-1" distribution="w1_-1~" value="0.000547048"/>
+        <continuous_scalar id="w1_0" distribution="w1_0~" value="0.000559846"/>
+        <continuous_scalar id="w1_1" distribution="w1_1~" value="0.000559935"/>
+        <continuous_scalar id="w1_5" distribution="w1_5~" value="0.000688222"/>
+        <continuous_scalar id="w1_10" distribution="w1_10~" value="0.001442749"/>
+        <continuous_scalar id="w1_50" distribution="w1_50~" value="0.000161074"/>
+        <continuous_scalar id="w1_100" distribution="w1_100~" value="0.0000383"/>
+
+        <continuous_scalar id="w2_-500" distribution="w2_-500~" value="0.295732276"/>
+        <continuous_scalar id="w2_-100" distribution="w2_-100~" value="0.001840833"/>
+        <continuous_scalar id="w2_-50" distribution="w2_-50~" value="0.002345191"/>
+        <continuous_scalar id="w2_-10" distribution="w2_-10~" value="0.001096138"/>
+        <continuous_scalar id="w2_-5" distribution="w2_-5~" value="0.230725727"/>
+        <continuous_scalar id="w2_-1" distribution="w2_-1~" value="0.085391181"/>
+        <continuous_scalar id="w2_0" distribution="w2_0~" value="0.000519837"/>
+        <continuous_scalar id="w2_1" distribution="w2_1~" value="0.000968863"/>
+        <continuous_scalar id="w2_5" distribution="w2_5~" value="0.000725667"/>
+        <continuous_scalar id="w2_10" distribution="w2_10~" value="0.000101591"/>
+        <continuous_scalar id="w2_50" distribution="w2_50~" value="0.000127977"/>
+        <continuous_scalar id="w2_100" distribution="w2_100~" value="0.00041605"/>
+        
+        <!-- species-specific, but fixed across exons -->
+        <continuous_scalar id="log_kappa0" distribution="log_kappa0~" value="0.8941228"/>
+        <continuous_scalar id="log_kappa1" distribution="log_kappa1~" value="0.7934675"/>
+        <continuous_scalar id="log_kappa2" distribution="log_kappa2~" value="0.4527812"/>
+
+        <continuous_scalar id="log_T0" distribution="flat~" value="1.1857987"/>
+        <continuous_scalar id="log_T1" distribution="flat~" value="0.2639169"/>
+        <continuous_scalar id="log_T2" distribution="flat~" value="2.2712193"/>
+
+        <continuous_scalar id="p0" distribution="p0~" value="0.00582721"/>
+        <continuous_scalar id="p1" distribution="p1~" value="0.0170657"/>
+        <continuous_scalar id="p2" distribution="p2~" value="0.0116652"/>
+
+        <!-- species- and exon-specific -->
+        <continuous_scalar id="log_theta0" distribution="log_theta~" value="-2.6"/>
+        <continuous_scalar id="log_theta1" distribution="log_theta~" value="-2.2"/>
+        <continuous_scalar id="log_theta2" distribution="log_theta~" value="-2.7"/>
+
+    </parameters>
+
+	<transformations>
+        <!-- Reparameterisations -->
+        <exp_transform id="theta0" exponent="log_theta0"/>
+        <exp_transform id="theta1" exponent="log_theta1"/>
+        <exp_transform id="theta2" exponent="log_theta2"/>
+        <exp_transform id="kappa0" exponent="log_kappa0"/>
+        <exp_transform id="kappa1" exponent="log_kappa1"/>
+        <exp_transform id="kappa2" exponent="log_kappa2"/>
+        <exp_transform id="T0" exponent="log_T0"/>
+        <exp_transform id="T1" exponent="log_T1"/>
+        <exp_transform id="T2" exponent="log_T2"/>
+
+        <concatenate id="w0" length="11">
+            w0_-100 w0_-50 w0_-10 w0_-5 w0_-1 w0_0 w0_1 w0_5 w0_10 w0_50 w0_100
+        </concatenate>
+        <concatenate id="w0_lethal" length="1">
+            w0_-500
+        </concatenate>
+        <concatenate id="w1" length="11">
+            w1_-100 w1_-50 w1_-10 w1_-5 w1_-1 w1_0 w1_1 w1_5 w1_10 w1_50 w1_100
+        </concatenate>
+        <concatenate id="w1_lethal" length="1">
+            w1_-500
+        </concatenate>
+        <concatenate id="w2" length="11">
+            w2_-100 w2_-50 w2_-10 w2_-5 w2_-1 w2_0 w2_1 w2_5 w2_10 w2_50 w2_100
+        </concatenate>
+        <concatenate id="w2_lethal" length="1">
+            w2_-500
+        </concatenate>
+
+		<gammaMapHMMHybrid_path_sampler id="gamma0" distribution="dmel~" rv="dmel"/>
+		<gammaMapHMMHybrid_path_sampler id="gamma1" distribution="dmau~" rv="dmau"/>
+		<gammaMapHMMHybrid_path_sampler id="gamma2" distribution="dyak~" rv="dyak"/>
+    </transformations>
+
+	<distributions>
+        <!-- General-purpose flat prior -->
+        <improper_uniform_distribution id="flat~"/>
+
+        <!-- Priors on hierarchical parameters (other than flat~) -->
+        <gamma_distribution id="w0_-500~" shape="328.2999706" scale="403.2379"/>
+        <gamma_distribution id="w0_-100~" shape="30.6561558" scale="403.2379"/>
+        <gamma_distribution id="w0_-50~"  shape="9.2086122" scale="403.2379"/>
+        <gamma_distribution id="w0_-10~"  shape="1.9880956" scale="403.2379"/>
+        <gamma_distribution id="w0_-5~"   shape="1.6968047" scale="403.2379"/>
+        <gamma_distribution id="w0_-1~"   shape="8.6485844" scale="403.2379"/>
+        <gamma_distribution id="w0_0~"   shape="9.2806986" scale="403.2379"/>
+        <gamma_distribution id="w0_1~"    shape="6.5125358" scale="403.2379"/>
+        <gamma_distribution id="w0_5~"    shape="3.5195487" scale="403.2379"/>
+        <gamma_distribution id="w0_10~"   shape="2.5482506" scale="403.2379"/>
+        <gamma_distribution id="w0_50~"   shape="0.4309665" scale="403.2379"/>
+        <gamma_distribution id="w0_100~"  shape="0.4476782" scale="403.2379"/>
+
+        <gamma_distribution id="w1_-500~" shape="239.8896126" scale="338.5598"/>
+        <gamma_distribution id="w1_-100~" shape="55.9564863" scale="338.5598"/>
+        <gamma_distribution id="w1_-50~"  shape="12.8893371" scale="338.5598"/>
+        <gamma_distribution id="w1_-10~"  shape="4.1477521" scale="338.5598"/>
+        <gamma_distribution id="w1_-5~"   shape="1.8315425" scale="338.5598"/>
+        <gamma_distribution id="w1_-1~"   shape="4.3552358" scale="338.5598"/>
+        <gamma_distribution id="w1_0~"   shape="4.4085607" scale="338.5598"/>
+        <gamma_distribution id="w1_1~"    shape="4.0030128" scale="338.5598"/>
+        <gamma_distribution id="w1_5~"    shape="4.6750391" scale="338.5598"/>
+        <gamma_distribution id="w1_10~"   shape="5.3345373" scale="338.5598"/>
+        <gamma_distribution id="w1_50~"   shape="0.6819880" scale="338.5598"/>
+        <gamma_distribution id="w1_100~"  shape="0.3866936" scale="338.5598"/>
+
+        <gamma_distribution id="w2_-500~" shape="71.6758831" scale="186.6712"/>
+        <gamma_distribution id="w2_-100~" shape="8.5446828" scale="186.6712"/>
+        <gamma_distribution id="w2_-50~"  shape="8.5074867" scale="186.6712"/>
+        <gamma_distribution id="w2_-10~"  shape="6.7995236" scale="186.6712"/>
+        <gamma_distribution id="w2_-5~"   shape="58.1203443" scale="186.6712"/>
+        <gamma_distribution id="w2_-1~"   shape="23.2614506" scale="186.6712"/>
+        <gamma_distribution id="w2_0~"   shape="2.8900427" scale="186.6712"/>
+        <gamma_distribution id="w2_1~"    shape="2.7762729" scale="186.6712"/>
+        <gamma_distribution id="w2_5~"    shape="1.3139813" scale="186.6712"/>
+        <gamma_distribution id="w2_10~"   shape="0.5745632" scale="186.6712"/>
+        <gamma_distribution id="w2_50~"   shape="0.8965619" scale="186.6712"/>
+        <gamma_distribution id="w2_100~"  shape="1.3103628" scale="186.6712"/>
+
+        <normal_distribution id="log_kappa0~" mean="0.9778448" sd="0.04267918"/>
+        <normal_distribution id="log_kappa1~" mean="0.8670122" sd="0.03603625"/>
+        <normal_distribution id="log_kappa2~" mean="0.5256157" sd="0.03622811"/>
+
+        <beta_distribution id="p0~" a="12.75427" b="1207.60925"/>
+        <beta_distribution id="p1~" a="20.69013" b="724.91400"/>
+        <beta_distribution id="p2~" a="25.33007" b="1417.78780"/>
+        
+        <!-- Priors on non-hierarchical parameters -->
+        <normal_distribution id="log_theta~" mean="-2.43302" sd="0.398639"/>
+		<codon61_sequence_stationary_distribution id="anc~" pi="pi"/>
+
+		<!-- Likelihood -->
+		<gammaMapHMMHybrid id="dmel~" anc="anc" theta="theta0" kappa="kappa0" gamma1="gamma" gamma2="gamma_lethal" T="T0" p="p0" pi="pi" gamma1_wt="w0" gamma2_wt="w0_lethal"/>
+		<gammaMapHMMHybrid id="dmau~" anc="anc" theta="theta1" kappa="kappa1" gamma1="gamma" gamma2="gamma_lethal" T="T1" p="p1" pi="pi" gamma1_wt="w1" gamma2_wt="w1_lethal"/>
+		<gammaMapHMMHybrid id="dyak~" anc="anc" theta="theta2" kappa="kappa2" gamma1="gamma" gamma2="gamma_lethal" T="T2" p="p2" pi="pi" gamma1_wt="w2" gamma2_wt="w2_lethal"/>
+	</distributions>
+
+<!-- 1 million -->
+	<mcmc niter="100000" seed="-1282084686" screen_update="10" random_sweep="false" performance_interval="200000">
+        <!-- moves on hyper-parameters -->
+<!--        <log_uniform_proposal parameter="w0_-500" half-width="0.6"/>
+        <log_uniform_proposal parameter="w0_-100" half-width="0.4"/>
+        <log_uniform_proposal parameter="w0_-50" half-width="0.8"/>
+        <log_uniform_proposal parameter="w0_-10" half-width="1"/>
+        <log_uniform_proposal parameter="w0_-5" half-width="1"/>
+        <log_uniform_proposal parameter="w0_-1" half-width="1"/>
+        <log_uniform_proposal parameter="w0_0" half-width="1"/>
+        <log_uniform_proposal parameter="w0_1" half-width="0.5"/>
+        <log_uniform_proposal parameter="w0_5" half-width="0.4"/>
+        <log_uniform_proposal parameter="w0_10" half-width="0.8"/>
+        <log_uniform_proposal parameter="w0_50" half-width="0.4"/>
+        <log_uniform_proposal parameter="w0_100" half-width="0.4"/>
+
+        <log_uniform_proposal parameter="w1_-500" half-width="0.6"/>
+        <log_uniform_proposal parameter="w1_-100" half-width="0.4"/>
+        <log_uniform_proposal parameter="w1_-50" half-width="0.4"/>
+        <log_uniform_proposal parameter="w1_-10" half-width="0.8"/>
+        <log_uniform_proposal parameter="w1_-5" half-width="1"/>
+        <log_uniform_proposal parameter="w1_-1" half-width="1"/>
+        <log_uniform_proposal parameter="w1_0" half-width="1"/>
+        <log_uniform_proposal parameter="w1_1" half-width="1"/>
+        <log_uniform_proposal parameter="w1_5" half-width="0.8"/>
+        <log_uniform_proposal parameter="w1_10" half-width="0.4"/>
+        <log_uniform_proposal parameter="w1_50" half-width="1"/>
+        <log_uniform_proposal parameter="w1_100" half-width="1"/>
+
+        <log_uniform_proposal parameter="w2_-500" half-width="0.4"/>
+        <log_uniform_proposal parameter="w2_-100" half-width="0.4"/>
+        <log_uniform_proposal parameter="w2_-50" half-width="0.8"/>
+        <log_uniform_proposal parameter="w2_-10" half-width="1"/>
+        <log_uniform_proposal parameter="w2_-5" half-width="0.4"/>
+        <log_uniform_proposal parameter="w2_-1" half-width="0.4"/>
+        <log_uniform_proposal parameter="w2_0" half-width="0.4"/>
+        <log_uniform_proposal parameter="w2_1" half-width="0.8"/>
+        <log_uniform_proposal parameter="w2_5" half-width="1"/>
+        <log_uniform_proposal parameter="w2_10" half-width="1"/>
+        <log_uniform_proposal parameter="w2_50" half-width="0.8"/>
+        <log_uniform_proposal parameter="w2_100" half-width="0.8"/>
+-->
+        <uniform_proposal parameter="log_T0" half-width="0.1"/>
+        <uniform_proposal parameter="log_T1" half-width="0.1"/>
+        <uniform_proposal parameter="log_T2" half-width="0.1"/>
+        
+<!--        <logit_uniform_proposal parameter="p0" half-width="0.4"/>
+        <logit_uniform_proposal parameter="p1" half-width="0.5"/>
+        <logit_uniform_proposal parameter="p2" half-width="0.5"/>
+   
+        <uniform_proposal parameter="log_kappa0" half-width="0.1"/>
+        <uniform_proposal parameter="log_kappa1" half-width="0.1"/>
+        <uniform_proposal parameter="log_kappa2" half-width="0.1"/>
+-->        
+        <!-- Moves on exon-specific parameters -->
+        <uniform_proposal parameter="log_theta0" half-width="0.3"/>
+        <uniform_proposal parameter="log_theta1" half-width="0.3"/>
+        <uniform_proposal parameter="log_theta2" half-width="0.5"/>
+        
+        <codon61_sequence_gibbs_sampler parameter="anc" weight="250"/>
+
+        <log burnin="0" thinning="10" file="mcmc.txt" record-move="false" record-proposals="false">
+            <!-- hyper-parameters -->
+            <parameter idref="w0"/>
+            <parameter idref="w1"/>
+            <parameter idref="w2"/>
+            <parameter idref="w0_lethal"/>
+            <parameter idref="w1_lethal"/>
+            <parameter idref="w2_lethal"/>
+            <parameter idref="T0"/>
+            <parameter idref="T1"/>
+            <parameter idref="T2"/>
+            <parameter idref="p0"/>
+            <parameter idref="p1"/>
+            <parameter idref="p2"/>
+            <parameter idref="kappa0"/>
+            <parameter idref="kappa1"/>
+            <parameter idref="kappa2"/>
+            
+            <!-- parameters -->
+            <parameter idref="theta0"/>
+            <parameter idref="theta1"/>
+            <parameter idref="theta2"/>
+
+            <parameter idref="gamma0"/>
+            <parameter idref="gamma1"/>
+            <parameter idref="gamma2"/>
+
+            <!-- log-likelihoods -->
+            <loglikelihood idref="dmel"/>
+            <loglikelihood idref="dmau"/>
+            <loglikelihood idref="dyak"/>
+       </log>
+       <log burnin="0" thinning="10" file="mcmc-anc.txt" record-move="false" record-proposals="false">
+            <parameter idref="anc"/>
+       </log>
+	</mcmc>
+
+</gcat>
