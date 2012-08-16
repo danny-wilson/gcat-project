@@ -1,0 +1,110 @@
+<?xml version="1.1"?>
+<!-- gammaMap analysis for two species in which the substitution parameters are estimated, but
+     the distribution of fitness effects and the ancestral sequence are assumed known. Samples
+     from the posterior distribution of selection parameters across sites are simulated. -->
+<gcat xmlns="http://www.danielwilson.me.uk/gcat">
+	<!-- Load the gammaMap library -->
+	<libraries>
+		<library file="libgammaMap.so"/>
+	</libraries>
+
+	<!-- Open the data -->
+	<data>
+	  <!-- Coding sequences -->
+	  <codon_count id="dmel" distribution="dmel~" file="exon.15A3_CG32568.mel.fa"/>
+          <codon_count id="dsim" distribution="dsim~" file="exon.15A3_CG32568.sim.fa"/>
+	</data>
+
+	<!-- Define and initialize the parameters -->
+	<parameters>
+		<!-- ancestral sequence -->
+		<codon_sequence id="anc">
+			TTT AAG ATC CTT TTG CCT TTG CAC AAG CCG CCA TCG TTA CCA AAG TAT TTC
+            CAT CAG CTG ATA AAA TGC ATT ATC GCA TTC CTT AAC CAA AAT CCA TCT TTC
+            ATT GAA AAA TAT GTC AAA GGT TTT CTA CGG CTC TGG CCG AAG ACG TCC TTT
+            ACT AAG GTG ACT TTG TTT CTA AGC GAG ATT GCC AGA ATT CTG GTA ATA AAA
+            AAT GAG CAA GAG GTC AAG AAA GTC CTG CTG ACG GTG TTT AAT CAT ATT GCA
+            AAA TGT CTG TGC AAT GAA AGC ACT AAG ATA GCT GAG CAC ACT CTT CTT TTG
+            TGG GAA AAC AAT GAG ATT TTG GAG GTT ATA GAT CGA AAC CAC GAG CTC ATC
+            ATG CCC ATT GTA TAT CCA CAC CTA TTA CGC ATA TTG ATA CGT CAT TTG AGA
+            AAA CCA ATG CAA ACG CAT GTC TCC ATT GTT TTA TGT AAT TTA CTA AAA ATG
+            AAC AAT ACG CTG TTT AGA AGC CTG ACT ACT
+		</codon_sequence>        
+        <!-- neutral mutation rate -->
+        <continuous_scalar id="theta" distribution="theta~" value="0.01"/>
+        <!-- transition-transversion ratio -->
+        <continuous_scalar id="kappa" distribution="kappa~" value="2.66"/>
+		<!-- Values of gamma (selection parameter) that the sliding windows can take -->
+        <continuous_vector id="gamma" length="11">
+            -100 -50 -10 -5 -1 0 1 5 10 50 100
+        </continuous_vector>
+		<!-- Values of gamma (selection parameter) that codons can take independently of the sliding window -->
+        <continuous_vector id="gamma_lethal" length="1">
+            -500
+        </continuous_vector>
+        <!-- divergence time since the ancestor -->
+        <continuous_scalar id="T" distribution="T~" value="3.60"/>
+        <!-- reciprocal of the mean window length (in codons) -->
+        <continuous_scalar id="p" value="0.02"/>
+		<!-- Frequency distribution of codon usage -->
+		<continuous_vector id="pi">
+			0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 
+			0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 
+			0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 
+			0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 
+			0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016 0.016
+		</continuous_vector>
+        <!-- relative frequencies of the values of gamma -->
+		<continuous_vector id="w">
+			0.019779793 0.000805624 0.000130344 0.000141461 0.00167126 0.000909282
+			0.000624556 0.000669248 0.001213208 0.0000449 0.0000365
+		</continuous_vector>
+        <!-- relative frequency of the value of gamma_lethal -->
+		<continuous_vector id="w_lethal">
+			0.77744665
+		</continuous_vector>
+	</parameters>
+
+	<!-- Define transformations of data and parameters -->
+	<transformations>
+        <!-- sample the selection coefficients at every codon along the sequence -->
+		<gammaMapHMMHybrid_path_sampler id="gmel" distribution="dmel~" rv="dmel"/>
+        <gammaMapHMMHybrid_path_sampler id="gsim" distribution="dsim~" rv="dsim"/>
+	</transformations>
+
+	<!-- Define the statistical distributions -->
+	<distributions>
+		<!-- Prior on parameters -->
+		<log_normal_distribution id="theta~" mean="-4.6" sd="1"/>
+        	<log_normal_distribution id="kappa~" mean="0.693" sd="1"/>
+		<improper_log_uniform_distribution id="T~"/>
+		<!-- Likelihood for the sequence data -->
+		<gammaMapHMMHybrid id="dmel~" anc="anc" theta="theta" kappa="kappa" gamma1="gamma" gamma2="gamma_lethal" T="T" p="p" pi="pi" gamma1_wt="w" gamma2_wt="w_lethal"/>
+		<gammaMapHMMHybrid id="dsim~" anc="anc" theta="theta" kappa="kappa" gamma1="gamma" gamma2="gamma_lethal" T="T" p="p" pi="pi" gamma1_wt="w" gamma2_wt="w_lethal"/>
+	</distributions>
+
+	<!-- Configure the Markov chain Monte Carlo (MCMC) -->
+	<mcmc niter="10000" screen_update="1">
+	        <!-- explore only the parameter theta (assume the values of the other parameters) -->
+		<log_uniform_proposal parameter="theta" half-width="0.4"/>
+                <log_uniform_proposal parameter="kappa" half-width="0.2"/>
+                <log_uniform_proposal parameter="T" half-width="0.4"/>
+
+		<!-- Configure the output log -->
+		<log burnin="100" thinning="10" file="eg2.params.mcmc.txt">
+		<!-- record the parameter values -->
+			<parameter idref="theta"/>
+			<parameter idref="kappa"/>
+			<parameter idref="T"/>
+		</log>
+		<log burnin="100" thinning="10" file="eg2.gamma.mcmc.txt">
+        	<!-- record simulated values of gamma for every codon -->
+			<parameter idref="gmel"/>
+			<parameter idref="gsim"/>
+		</log>
+		<log burnin="100" thinning="10" file="eg2.anc.mcmc.txt">
+            	<!-- record the ancestral sequence for every codon -->
+            		<parameter idref="anc"/>
+        	</log>
+	</mcmc>
+</gcat>
