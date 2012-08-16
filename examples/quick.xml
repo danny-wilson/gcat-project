@@ -1,21 +1,21 @@
 <?xml version="1.1"?>
 <!-- Simple gammaMap analysis for two species. All parameters assumed known.
-     Samples from the posterior distribution of selection parameters
-     across sites are simulated as part of the MCMC.
-	 -->
+ Samples from the posterior distribution of selection parameters
+ across sites are simulated as part of the MCMC.
+ -->
 <gcat xmlns="http://www.danielwilson.me.uk/gcat">
 	<!-- Load the gammaMap library -->
 	<libraries>
 		<library file="libgammaMap.so"/>
 	</libraries>
-
+	
 	<!-- Open the data -->
 	<data>
 		<!-- Coding sequences -->
 		<codon_count id="dmel" distribution="dmel~" file="exon.15A3_CG32568.mel.fa"/>
         <codon_count id="dsim" distribution="dsim~" file="exon.15A3_CG32568.sim.fa"/>
 	</data>
-
+	
 	<!-- Define and initialize the parameters -->
 	<parameters>
 		<!-- ancestral sequence -->
@@ -64,17 +64,17 @@
 		<continuous_vector id="w_lethal">
 			0.77744665
 		</continuous_vector>
-	<!-- dummy variable -->
+		<!-- dummy variable -->
 		<continuous_scalar id="Z" distribution="Z~" value="0"/>
 	</parameters>
-
+	
 	<!-- Define transformations of data and parameters -->
 	<transformations>
         <!-- sample the selection coefficients at every codon along the sequence -->
 		<gammaMapHMMHybrid_path_sampler id="gmel" distribution="dmel~" rv="dmel"/>
         <gammaMapHMMHybrid_path_sampler id="gsim" distribution="dsim~" rv="dsim"/>
 	</transformations>
-
+	
 	<!-- Define the statistical distributions -->
 	<distributions>
         <!-- Prior on dummy variable Z -->
@@ -83,12 +83,12 @@
 		<gammaMapHMMHybrid id="dmel~" anc="anc" theta="theta" kappa="kappa" gamma1="gamma" gamma2="gamma_lethal" T="T" p="p" pi="pi" gamma1_wt="w" gamma2_wt="w_lethal"/>
 		<gammaMapHMMHybrid id="dsim~" anc="anc" theta="theta" kappa="kappa" gamma1="gamma" gamma2="gamma_lethal" T="T" p="p" pi="pi" gamma1_wt="w" gamma2_wt="w_lethal"/>
 	</distributions>
-
+	
 	<!-- Configure the Markov chain Monte Carlo (MCMC) -->
 	<mcmc niter="1000" screen_update="1">
         <!-- explore only the parameter theta (assume the values of the other parameters) -->
 		<uniform_proposal parameter="Z" half-width="1"/>
-
+		
 		<!-- Configure the output log -->
 		<log burnin="0" thinning="1" file="quick.mcmc.txt">
         	<!-- record simulated values of gamma for every codon -->

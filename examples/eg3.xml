@@ -1,22 +1,22 @@
 <?xml version="1.1"?>
 <!-- gammaMap analysis for two species in which the substitution parameters are estimated, but
-     the distribution of fitness effects and the ancestral sequence are assumed known. In this
-     example, maximum a posteriori estimates of the substitution parameters are obtained as part
-     of an empirical Bayes analysis.
--->
+ the distribution of fitness effects and the ancestral sequence are assumed known. In this
+ example, maximum a posteriori estimates of the substitution parameters are obtained as part
+ of an empirical Bayes analysis.
+ -->
 <gcat xmlns="http://www.danielwilson.me.uk/gcat">
 	<!-- Load the gammaMap library -->
 	<libraries>
 		<library file="libgammaMap.so"/>
 	</libraries>
-
+	
 	<!-- Open the data -->
 	<data>
-	  <!-- Coding sequences -->
-	  <codon_count id="dmel" distribution="dmel~" file="exon.15A3_CG32568.mel.fa"/>
-          <codon_count id="dsim" distribution="dsim~" file="exon.15A3_CG32568.sim.fa"/>
+		<!-- Coding sequences -->
+		<codon_count id="dmel" distribution="dmel~" file="exon.15A3_CG32568.mel.fa"/>
+		<codon_count id="dsim" distribution="dsim~" file="exon.15A3_CG32568.sim.fa"/>
 	</data>
-
+	
 	<!-- Define and initialize the parameters -->
 	<parameters>
 		<!-- ancestral sequence -->
@@ -66,7 +66,7 @@
 			0.77744665
 		</continuous_vector>
 	</parameters>
-
+	
 	<!-- Define transformations of data and parameters -->
 	<transformations>
 		<exp_transform id="theta" exponent="ltheta"/>
@@ -76,18 +76,18 @@
 		<gammaMapHMMHybrid_path_sampler id="gmel" distribution="dmel~" rv="dmel"/>
         <gammaMapHMMHybrid_path_sampler id="gsim" distribution="dsim~" rv="dsim"/>
 	</transformations>
-
+	
 	<!-- Define the statistical distributions -->
 	<distributions>
 		<!-- Prior on parameters -->
 		<normal_distribution id="ltheta~" mean="-4.6" sd="1"/>
-        	<normal_distribution id="lkappa~" mean="0.693" sd="1"/>
+		<normal_distribution id="lkappa~" mean="0.693" sd="1"/>
 		<improper_uniform_distribution id="lT~"/>
 		<!-- Likelihood for the sequence data -->
 		<gammaMapHMMHybrid id="dmel~" anc="anc" theta="theta" kappa="kappa" gamma1="gamma" gamma2="gamma_lethal" T="T" p="p" pi="pi" gamma1_wt="w" gamma2_wt="w_lethal"/>
 		<gammaMapHMMHybrid id="dsim~" anc="anc" theta="theta" kappa="kappa" gamma1="gamma" gamma2="gamma_lethal" T="T" p="p" pi="pi" gamma1_wt="w" gamma2_wt="w_lethal"/>
 	</distributions>
-
+	
 	<!-- Configure the optimization -->
 	<powell screen_update="1">
 		ltheta lkappa lT
