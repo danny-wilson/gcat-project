@@ -31,7 +31,7 @@ private:
 	int _n;		// Length of vector
 public:
 	// Constructor
-	ContinuousVariable2ContinuousVectorVariable(string name="", DAG* dag=0, const int n=1) : DAGcomponent(name,dag,"ContinuousVariable2ContinuousVectorVariable"), Transformation(ContinuousVariable2ContinuousVectorVariableParameterNames,1), _n(1) {};
+	ContinuousVariable2ContinuousVectorVariable(string name="", DAG* dag=0, const int n=1) : DAGcomponent(name,dag,"ContinuousVariable2ContinuousVectorVariable"), Transformation(ContinuousVariable2ContinuousVectorVariableParameterNames,1), _n(n) {};
 	// Copy constructor
 	ContinuousVariable2ContinuousVectorVariable(const ContinuousVariable2ContinuousVectorVariable& x) : DAGcomponent(x), Transformation(x), _n(x._n) {};
 	
