@@ -1,0 +1,30 @@
+BootStrap: debootstrap
+OSVersion: trusty
+MirrorURL: http://us.archive.ubuntu.com/ubuntu/
+Include:   wget unzip
+
+%labels
+	AUTHOR Daniel Wilson
+	DATE 25 June 2017
+
+%post
+	mkdir /usr/tmp
+	cd /usr/tmp
+	wget --no-check-certificate https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gcat-project/Ubuntu10.10.zip
+	unzip /usr/tmp/Ubuntu10.10.zip
+	chmod 755 /usr/tmp/gcat/gcat
+	chmod 755 /usr/tmp/gcat/lib*
+	mv /usr/tmp/gcat/gcat /usr/bin/
+	mv /usr/tmp/gcat/lib* /usr/lib/
+	mv /usr/tmp/gcat /usr/share/
+	ln -s /usr/lib/libgsl.so.0.16.0 /usr/lib/libgsl.so.0
+	rm -rf /usr/tmp
+
+%runscript
+	echo "Arguments received: $*"
+	exec /usr/bin/gcat "$@"
+
+%test
+	cd /tmp
+	exec /usr/bin/gcat /usr/share/gcat/examples/test.xml
+	rm -f /tmp/test.mcmc.txt
