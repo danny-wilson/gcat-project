@@ -29,6 +29,7 @@
 #include <fstream>
 #include <sstream>
 #include <errno.h>
+#include <unistd.h>
 
 namespace gcat {
 
