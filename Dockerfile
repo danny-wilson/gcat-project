@@ -10,6 +10,7 @@ COPY . /tmp/gcat
 RUN cd /tmp/gcat && make
 RUN mv /tmp/gcat/gcat /usr/bin/
 RUN mv /tmp/gcat/lib* /usr/lib/
+RUN mv /tmp/gcat/src /usr/include/gcat
 RUN rm /tmp/gcat/*.o
 RUN cd /tmp/gcat/examples && gcat test.xml
 RUN rm /tmp/gcat/examples/test.mcmc.txt
