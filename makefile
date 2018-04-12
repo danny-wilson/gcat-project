@@ -9,7 +9,7 @@
 #
 
 # Header file locations for gcat-project
-INCLUDE = -Isrc -Isrc/myutils
+INCLUDE = -Isrc -Isrc/myutils -I/usr/local/include
 # C++ compiler
 CC = g++
 # C++ compiler for MPICH2
@@ -17,7 +17,7 @@ MPICC = mpic++
 # C++ linker
 LD = g++
 # C++ standard compiler options
-CXXFLAGS = -Wall -w -O0 -g -D __NOEXTERN_FOR_CINCLUDE 
+CXXFLAGS = -Wall -w -O3 -g -D __NOEXTERN_FOR_CINCLUDE 
 # C++ compiler options for gcat library code
 CC_OPTIONS = $(CXXFLAGS) -fPIC
 # C++ linker options
@@ -26,7 +26,8 @@ CC_OPTIONS = $(CXXFLAGS) -fPIC
 #		-lxerces-c\
 #		-lgsl\
 #		-lgslcblas
-LNK_OPTIONS = -lxerces-c -L./
+LNK_OPTIONS = -Wl,--no-as-needed -L./ -lxerces-c
+#-L./ -L/usr/local/lib
 
 #
 # Build gcat-project
