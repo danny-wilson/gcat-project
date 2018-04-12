@@ -1,0 +1,19 @@
+FROM ubuntu:trusty
+LABEL app="GCAT"
+LABEL description="General computational analysis tool"
+LABEL maintainer="Daniel Wilson"
+LABEL build-type="From Ubuntu 10.10 binaries"
+RUN apt-get -yqq update
+RUN apt-get -yqq install wget unzip
+RUN mkdir /usr/tmp
+RUN cd /usr/tmp && wget --no-check-certificate https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gcat-project/Ubuntu10.10.zip
+RUN cd /usr/tmp && unzip /usr/tmp/Ubuntu10.10.zip
+RUN chmod 755 /usr/tmp/gcat/gcat
+RUN chmod 755 /usr/tmp/gcat/lib*
+RUN mv /usr/tmp/gcat/gcat /usr/bin/
+RUN mv /usr/tmp/gcat/lib* /usr/lib/
+RUN mv /usr/tmp/gcat /usr/share/
+RUN ln -s /usr/lib/libgsl.so.0.16.0 /usr/lib/libgsl.so.0
+RUN rm -rf /usr/tmp
+WORKDIR /home/ubuntu
+ENTRYPOINT ["/usr/bin/gcat"]
