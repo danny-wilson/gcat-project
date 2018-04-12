@@ -7,9 +7,11 @@ RUN apt-get -yqq update
 RUN apt-get -yqq install make g++ libgsl0-dev libxerces-c-dev
 RUN mkdir /tmp/gcat
 COPY . /tmp/gcat
-RUN make
+RUN cd /tmp/gcat && make
 RUN mv /tmp/gcat/gcat /usr/bin/
 RUN mv /tmp/gcat/lib* /usr/lib/
+RUN rm /tmp/gcat/*.o
 RUN cd /tmp/gcat/examples && gcat test.xml
+RUN rm /tmp/gcat/examples/test.mcmc.txt
 WORKDIR /home/ubuntu
 ENTRYPOINT ["/usr/bin/gcat"]
