@@ -38,6 +38,7 @@ public:
 		mydouble old_likelihood = _mcmc->likelihood();
 		mydouble hastings = propose();
 		mydouble new_likelihood = _mcmc->update_likelihood();
+		//std::cout << "New lik = " << new_likelihood.LOG() << " old lik = " << old_likelihood.LOG() << " Hastings = " << hastings.LOG();
 		// Check....
 		/*	if(iter==5500) {
 		 _dag->reset_all();
@@ -49,15 +50,18 @@ public:
 		// Log (if necessary)
 		_mcmc->record_proposal();
 		_mcmc->set_alpha(new_likelihood / old_likelihood * hastings);
+		//std::cout << " alpha = " << _mcmc->alpha().LOG() << std::endl;
 		bool _accept = (0 <= _mcmc->alpha().LOG() || _mcmc->ran()->U() < _mcmc->alpha().todouble());
 		_mcmc->set_accept(_accept);
 		if(_accept) {
 			accept();
+			//std::cout << "Accepted!\n\n";
 		}
 		else {
 			_mcmc->revert_likelihood();
 			//_likelihood = old_likelihood;
 			reject();
+			//std::cout << "Rejected!\n\n";
 		}
 	}
 	// Propose the move and return a Hastings ratio
