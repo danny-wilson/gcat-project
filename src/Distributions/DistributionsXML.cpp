@@ -32,6 +32,7 @@
 #include <Distributions/Normal.h>
 #include <Distributions/Uniform.h>
 #include <RandomVariables/ContinuousVector.h>
+#include <Distributions/ContinuousVector.h>
 
 namespace gcat {
 
@@ -146,6 +147,15 @@ continuous_mixture_XMLParser::continuous_mixture_XMLParser(const XMLCh* const ur
 	getDAG()->assign_distribution_to_compound_distribution(sattr[0],attrNames[3],sattr[3]);
 }
 
+	continuous_vector_distribution_XMLParser::continuous_vector_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<continuous_vector_distribution_XMLParser>(master_parser,parent_parser) {
+		// Read in the attributes
+		const int nattr = 2;
+		const char* attrNames[nattr] = {"id","marginal"};
+		vector<string> sattr = attributesToStrings(nattr,attrNames,attrs);
+		new ContinuousVectorDistribution(sattr[0],getDAG());
+		getDAG()->assign_distribution_to_compound_distribution(sattr[0],attrNames[1],sattr[1]);
+	}
+	
 gamma_distribution_XMLParser::gamma_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<gamma_distribution_XMLParser>(master_parser,parent_parser) {
 	// Read in the attributes
 	const int nattr = 3;
@@ -332,6 +342,7 @@ void LoadDistributionsXML() {
 	distributions_XMLParser::add_child("continuous_mosaic_distribution",&continuous_mosaic_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("continuous_mosaic_beta_mixture_distribution",&continuous_mosaic_beta_mixture_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("continuous_mixture",&continuous_mixture_XMLParser::factory);
+	distributions_XMLParser::add_child("continuous_vector_distribution",&continuous_vector_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("gamma_distribution",&gamma_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("improper_beta_distribution",&improper_beta_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("improper_log_uniform_distribution",&improper_log_uniform_distribution_XMLParser::factory);

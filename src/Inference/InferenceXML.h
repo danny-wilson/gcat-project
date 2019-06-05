@@ -27,6 +27,7 @@
 #include <Inference/MCMC/ContinuousMosaicMoves.h>
 #include <iostream>
 #include <Inference/ML/PowellML.h>
+#include <Inference/MCMC/ContinuousVectorMoves.h>
 
 using std::cout;
 
@@ -93,6 +94,38 @@ public:
 	continuous_mosaic_uniform_proposal_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
 };
 
+
+/*	<xs:element name="continuous_vector_uniform_proposal">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+*/
+	class continuous_vector_uniform_proposal_XMLParser : public DAGXMLParserTemplate<continuous_vector_uniform_proposal_XMLParser> {
+	protected:
+		MCMC* _mcmc;
+	public:
+		continuous_vector_uniform_proposal_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
+	};
+	
+/*	<xs:element name="continuous_vector_log_uniform_proposal">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+*/
+	class continuous_vector_log_uniform_proposal_XMLParser : public DAGXMLParserTemplate<continuous_vector_log_uniform_proposal_XMLParser> {
+	protected:
+		MCMC* _mcmc;
+	public:
+		continuous_vector_log_uniform_proposal_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
+	};
+	
+	
 /*	<xs:element name="log_uniform_proposal">
 		<xs:complexType>
 			<xs:attribute name="parameter" type="xs:string" use="required"/>

@@ -89,6 +89,18 @@ public:
 	continuous_mixture_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
 };
 
+/*	<xs:element name="continuous_vector_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="marginal" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+*/
+	class continuous_vector_distribution_XMLParser : public DAGXMLParserTemplate<continuous_vector_distribution_XMLParser> {
+	public:
+		continuous_vector_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
+	};
+
 /*	<xs:element name="gamma_distribution">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:string" use="required"/>

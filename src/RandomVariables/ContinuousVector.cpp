@@ -55,7 +55,7 @@ void ContinuousVectorRV::set(const vector<int>& pos, const vector<double>& value
 }
 
 void ContinuousVectorRV::propose(const int i, const double value) {
-	_previous_value[i] = value;
+	_previous_value = _value;
 	_value[i] = value;
 	_has_changed[i] = true;
 	act_on_signal(_PROPOSE);
@@ -63,7 +63,7 @@ void ContinuousVectorRV::propose(const int i, const double value) {
 }
 
 void ContinuousVectorRV::propose(const vector<double>& value) {
-	_previous_value = value;
+	_previous_value = _value;
 	_value = value;
 	_has_changed = vector<bool>(_n,true);
 	act_on_signal(_PROPOSE);
@@ -71,7 +71,7 @@ void ContinuousVectorRV::propose(const vector<double>& value) {
 }
 
 void ContinuousVectorRV::propose(const vector<int>& pos, const vector<double>& value) {
-	_previous_value = value;
+	_previous_value = _value;
 	int i;
 	for(i=0;i<pos.size();i++) {
 		_value[pos[i]] = value[i];

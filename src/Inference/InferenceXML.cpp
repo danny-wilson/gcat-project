@@ -101,6 +101,40 @@ continuous_mosaic_uniform_proposal_XMLParser::continuous_mosaic_uniform_proposal
 	new ContinuousMosaicUniformProposal(_mcmc,target,double_weight,double_half_width);
 }
 
+	continuous_vector_uniform_proposal_XMLParser::continuous_vector_uniform_proposal_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<continuous_vector_uniform_proposal_XMLParser>(master_parser,parent_parser) {
+		// Read in the attributes
+		const int nattr = 3;
+		const char* attrNames[nattr] = {"parameter","half-width","weight"};
+		vector<string> sattr = attributesToStrings(nattr,attrNames,attrs);
+		vector<string> target(1,sattr[0]);
+		double double_half_width;
+		if(!from_string<double>(double_half_width,sattr[1])) error("continuous_vector_uniform_proposal_XMLParser: cannot convert parameter half-width to double");
+		double double_weight;
+		if(!from_string<double>(double_weight,sattr[2])) error("continuous_vector_uniform_proposal_XMLParser: cannot convert parameter weight to double");
+		// Get _mcmc from parent parser via dynamic type-checking
+		MCMC_XMLParser* MCMC_XMLParser_parent_parser = dynamic_cast<MCMC_XMLParser*>(parent_parser);
+		if(!MCMC_XMLParser_parent_parser) error("continuous_vector_uniform_proposal_XMLParser: parent parser must be of type MCMC_XMLParser");
+		_mcmc = MCMC_XMLParser_parent_parser->get_mcmc();
+		new ContinuousVectorJointUniformProposal(_mcmc,target,double_weight,double_half_width);
+	}
+
+	continuous_vector_log_uniform_proposal_XMLParser::continuous_vector_log_uniform_proposal_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<continuous_vector_log_uniform_proposal_XMLParser>(master_parser,parent_parser) {
+		// Read in the attributes
+		const int nattr = 3;
+		const char* attrNames[nattr] = {"parameter","half-width","weight"};
+		vector<string> sattr = attributesToStrings(nattr,attrNames,attrs);
+		vector<string> target(1,sattr[0]);
+		double double_half_width;
+		if(!from_string<double>(double_half_width,sattr[1])) error("continuous_vector_log_uniform_proposal_XMLParser: cannot convert parameter half-width to double");
+		double double_weight;
+		if(!from_string<double>(double_weight,sattr[2])) error("continuous_vector_log_uniform_proposal_XMLParser: cannot convert parameter weight to double");
+		// Get _mcmc from parent parser via dynamic type-checking
+		MCMC_XMLParser* MCMC_XMLParser_parent_parser = dynamic_cast<MCMC_XMLParser*>(parent_parser);
+		if(!MCMC_XMLParser_parent_parser) error("continuous_vector_log_uniform_proposal_XMLParser: parent parser must be of type MCMC_XMLParser");
+		_mcmc = MCMC_XMLParser_parent_parser->get_mcmc();
+		new ContinuousVectorJointLogUniformProposal(_mcmc,target,double_weight,double_half_width);
+	}
+	
 log_uniform_proposal_XMLParser::log_uniform_proposal_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<log_uniform_proposal_XMLParser>(master_parser,parent_parser) {
 	// Read in the attributes
 	const int nattr = 3;
@@ -576,6 +610,8 @@ void LoadInferenceXML() {
 	MCMC_XMLParser::add_child("continuous_mosaic_log_uniform_proposal",&continuous_mosaic_log_uniform_proposal_XMLParser::factory);
 	MCMC_XMLParser::add_child("continuous_mosaic_splitmerge_block",&continuous_mosaic_splitmerge_block_XMLParser::factory);
 	MCMC_XMLParser::add_child("continuous_mosaic_uniform_proposal",&continuous_mosaic_uniform_proposal_XMLParser::factory);
+	MCMC_XMLParser::add_child("continuous_vector_uniform_proposal",&continuous_vector_uniform_proposal_XMLParser::factory);
+	MCMC_XMLParser::add_child("continuous_vector_log_uniform_proposal",&continuous_vector_log_uniform_proposal_XMLParser::factory);
 	MCMC_XMLParser::add_child("log_uniform_proposal",&log_uniform_proposal_XMLParser::factory);
 	MCMC_XMLParser::add_child("logit_uniform_proposal",&logit_uniform_proposal_XMLParser::factory);
 	MCMC_XMLParser::add_child("mpi_adaptive_metropolis",&mpi_adaptive_metropolis_XMLParser::factory);

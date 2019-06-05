@@ -287,6 +287,13 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="continuous_vector_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="marginal" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
 	<xs:element name="gamma_distribution" substitutionGroup="abstract_distribution">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:string" use="required"/>
@@ -393,6 +400,22 @@
 	</xs:element>
 
 	<xs:element name="continuous_mosaic_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_vector_uniform_proposal" substitutionGroup="abstract_MCMC">
+		<xs:complexType>
+			<xs:attribute name="parameter" type="xs:string" use="required"/>
+			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
+			<xs:attribute name="weight" type="xs:decimal" default="1"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_vector_log_uniform_proposal" substitutionGroup="abstract_MCMC">
 		<xs:complexType>
 			<xs:attribute name="parameter" type="xs:string" use="required"/>
 			<xs:attribute name="half-width" type="xs:decimal" default="1"/>
