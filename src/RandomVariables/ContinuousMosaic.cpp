@@ -20,12 +20,20 @@
 
 namespace gcat {
 
-ContinuousMosaicRV::ContinuousMosaicRV(const int n, string name, DAG* dag, const vector<int> boundaries, const vector<double> values) : 
+ContinuousMosaicRV::ContinuousMosaicRV(const int n, string name, DAG* dag, vector<int> boundaries, vector<double> values) :
 DAGcomponent(name,dag,"ContinuousMosaicRV"), RandomVariable(), _n(n), _nblocks(boundaries.size()), _block_start(vector<int>(_n)), 
 _previous_block_start(vector<int>(_n)), _block_end(vector<int>(_n)), _previous_block_end(vector<int>(_n)), _value(vector<double>(_n)), 
 _previous_value(vector<double>(_n)), _last_move(NO_CHANGE), _has_changed(_n,true) {
 	if(boundaries.size()!=values.size()) error("ContinuousMosaicRV(): number of boundaries must equal number of values");
-	if(boundaries[0]!=0) error("ContinuousMosaicRV(): first boundary must be at zero");
+    if(boundaries[0]!=0) {
+        if(boundaries[0]==-1 && boundaries.size()==1) {
+            boundaries = vector<int>(n);
+            for(int i=0;i<n;i++) boundaries[i] = i;
+            values = vector<double>(n,values[0]);
+        } else {
+            error("ContinuousMosaicRV(): first boundary must be at zero");
+        }
+    }
 	// Initialize _block_start
 	int bix = 0, pos;
 	int next_boundary = boundaries[bix];
