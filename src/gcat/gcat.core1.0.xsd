@@ -278,6 +278,15 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="continuous_mosaic_mixture_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="p" type="xs:string" use="required"/>
+			<xs:attribute name="m" type="xs:string" use="required"/>
+			<xs:attribute name="marginal" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
 	<xs:element name="continuous_mixture" substitutionGroup="abstract_distribution">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:string" use="required"/>

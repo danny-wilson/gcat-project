@@ -75,6 +75,20 @@ public:
 	continuous_mosaic_beta_mixture_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
 };
 
+/*	<xs:element name="continuous_mosaic_mixture_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="p" type="xs:string" use="required"/>
+			<xs:attribute name="m" type="xs:string" use="required"/>
+			<xs:attribute name="marginal" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+ */
+class continuous_mosaic_mixture_distribution_XMLParser : public DAGXMLParserTemplate<continuous_mosaic_mixture_distribution_XMLParser> {
+public:
+	continuous_mosaic_mixture_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
+};
+	
 /*	<xs:element name="continuous_mixture">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:string" use="required"/>

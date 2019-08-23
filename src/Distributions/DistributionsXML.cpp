@@ -21,6 +21,7 @@
 #include <Distributions/Beta.h>
 #include <Distributions/ContinuousMosaic.h>
 #include <Distributions/ContinuousMosaicBetaMixture.h>
+#include <Distributions/ContinuousMosaicMixture.h>
 #include <Distributions/ContinuousMixture.h>
 #include <Distributions/Gamma.h>
 #include <Distributions/ImproperBeta.h>
@@ -128,6 +129,33 @@ continuous_mosaic_beta_mixture_distribution_XMLParser::continuous_mosaic_beta_mi
 	getDAG()->assign_distribution_to_compound_distribution(sattr[0],attrNames[3],sattr[3]);
 }
 
+continuous_mosaic_mixture_distribution_XMLParser::continuous_mosaic_mixture_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<continuous_mosaic_mixture_distribution_XMLParser>(master_parser,parent_parser) {
+	// Read in the attributes
+	const int nattr = 4;
+	const char* attrNames[nattr] = {"id","p","m","marginal"};
+	vector<string> sattr = attributesToStrings(nattr,attrNames,attrs);
+	// Vector of geometric probability parameters: do not allow variable name to be passed
+	vector<double> vdouble_p;
+	if(!string_to_vector<double>(vdouble_p,sattr[1])) error("continuous_mosaic_mixture_distribution_XMLParser: could not convert p to vector double");
+	// Internally-generated name
+	sattr[1] = "_" + sattr[0] + "." + attrNames[1];
+	const int p_length = vdouble_p.size();
+	new ContinuousVectorRV(p_length,sattr[1],getDAG(),vdouble_p);
+	getDAG()->set_constant(sattr[1]);
+	// Vector of mixture proportions: do not allow variable name to be passed
+	vector<double> vdouble_m;
+	if(!string_to_vector<double>(vdouble_m,sattr[2])) error("continuous_mosaic_mixture_distribution_XMLParser: could not convert m to vector double");
+	// Internally-generated name
+	sattr[2] = "_" + sattr[0] + "." + attrNames[2];
+	if(vdouble_m.size()!=p_length) error("continuous_mosaic_mixture_distribution_XMLParser: vectors p and m must have same lengths");
+	new ContinuousVectorRV(p_length,sattr[2],getDAG(),vdouble_m);
+	getDAG()->set_constant(sattr[2]);
+	new ContinuousMosaicMixtureDistribution(sattr[0],getDAG());
+	getDAG()->assign_parameter_to_distribution(sattr[0],attrNames[1],sattr[1]);
+	getDAG()->assign_parameter_to_distribution(sattr[0],attrNames[2],sattr[2]);
+	getDAG()->assign_distribution_to_compound_distribution(sattr[0],attrNames[3],sattr[3]);
+}
+	
 continuous_mixture_XMLParser::continuous_mixture_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<continuous_mixture_XMLParser>(master_parser,parent_parser) {
 	// Read in the attributes
 	const int nattr = 4;
@@ -341,6 +369,7 @@ void LoadDistributionsXML() {
 	distributions_XMLParser::add_child("beta_distribution",&beta_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("continuous_mosaic_distribution",&continuous_mosaic_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("continuous_mosaic_beta_mixture_distribution",&continuous_mosaic_beta_mixture_distribution_XMLParser::factory);
+	distributions_XMLParser::add_child("continuous_mosaic_mixture_distribution",&continuous_mosaic_mixture_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("continuous_mixture",&continuous_mixture_XMLParser::factory);
 	distributions_XMLParser::add_child("continuous_vector_distribution",&continuous_vector_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("gamma_distribution",&gamma_distribution_XMLParser::factory);

@@ -48,6 +48,7 @@ GCAT_CORE_OBJECTS = \
 		./ContinuousMixture.o\
 		./Distribution_ContinuousMosaic.o\
 		./Distribution_ContinuousMosaicBetaMixture.o\
+		./Distribution_ContinuousMosaicMixture.o\
 		./Gamma.o\
 		./ImproperBeta.o\
 		./ImproperLogUniform.o\
@@ -163,6 +164,9 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 
 ./Distribution_ContinuousMosaicBetaMixture.o : src/Distributions/ContinuousMosaicBetaMixture.cpp
 	$(CC) $(CC_OPTIONS) src/Distributions/ContinuousMosaicBetaMixture.cpp -c $(INCLUDE) -o ./Distribution_ContinuousMosaicBetaMixture.o
+
+./Distribution_ContinuousMosaicMixture.o : src/Distributions/ContinuousMosaicMixture.cpp
+	$(CC) $(CC_OPTIONS) src/Distributions/ContinuousMosaicMixture.cpp -c $(INCLUDE) -o ./Distribution_ContinuousMosaicMixture.o
 
 ./DistributionsXML.o : src/Distributions/DistributionsXML.cpp
 	$(CC) $(CC_OPTIONS) src/Distributions/DistributionsXML.cpp -c $(INCLUDE) -o ./DistributionsXML.o
