@@ -27,6 +27,7 @@ _previous_value(vector<double>(_n)), _last_move(NO_CHANGE), _has_changed(_n,true
 	if(boundaries.size()!=values.size()) error("ContinuousMosaicRV(): number of boundaries must equal number of values");
     if(boundaries[0]!=0) {
         if(boundaries[0]==-1 && boundaries.size()==1) {
+            _nblocks = n;
             boundaries = vector<int>(n);
             for(int i=0;i<n;i++) boundaries[i] = i;
             values = vector<double>(n,values[0]);
