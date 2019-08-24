@@ -149,9 +149,7 @@ mydouble ContinuousMosaicMixtureDistribution::full_likelihood(const ContinuousMo
 			}
 			blockstart = i;
 			// Update the likelihood
-			mydouble LIKI;
-			LIKI.setlog(liki);
-			lik *= LIKI;
+			lik *= mydouble(liki);
 		}
 	}
 	// The last block has length *at least* blocklen
@@ -161,9 +159,7 @@ mydouble ContinuousMosaicMixtureDistribution::full_likelihood(const ContinuousMo
 		liki += m[j]*pow(1-p[j],blocklen-1);
 	}
 	// Update the likelihood
-	mydouble LIKI;
-	LIKI.setlog(liki);
-	lik *= LIKI;
+	lik *= mydouble(liki);
 
 	// Return the likelihood
 	return lik;

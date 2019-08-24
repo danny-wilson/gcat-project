@@ -1,0 +1,35 @@
+<?xml version="1.1"?>
+<gcat xmlns="http://www.danielwilson.me.uk/gcat">
+	<libraries>
+	</libraries>
+	
+	<data>
+	</data>
+	
+	<parameters>
+		<continuous_mosaic id="x" distribution="x~" length="333" boundaries="0" values="1"/>
+	</parameters>
+	
+	<transformations>
+	        <continuous_mosaic_num_blocks id="nblo" continuous_mosaic="x"/>
+	</transformations>
+    
+	<distributions>
+		<normal_distribution id="marginal_x~" mean="0.0" sd="1.0"/>
+		<continuous_mosaic_mixture_distribution id="x~" p="0.03 0.9" m="0.5 0.5" marginal="marginal_x~"/>
+	</distributions>
+	
+	<mcmc niter="10000000" seed="-1255892792" screen_update="1">
+	        <continuous_mosaic_uniform_proposal parameter="x" half-width="1" weight="1"/>
+		<continuous_mosaic_extend_block parameter="x" mean_extension="15" weight="1"/>
+<!--		<continuous_mosaic_extend_block parameter="x" mean_extension="1.5" weight="1"/>-->
+		<continuous_mosaic_splitmerge_block parameter="x" p="0.03" weight="1" mean_type="arithmetic"/>
+<!--		<continuous_mosaic_splitmerge_block parameter="x" p="0.9" weight="1" mean_type="arithmetic"/>-->
+
+		<log burnin="0" thinning="1000" file="test.mcmc.txt">
+			<parameter idref="x"/>
+			<parameter idref="nblo"/>
+			<loglikelihood idref="x"/>
+		</log>
+	</mcmc>
+</gcat>
