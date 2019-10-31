@@ -1,6 +1,6 @@
-/*  Copyright 2012 Daniel Wilson.
+/*  Copyright 2019 Daniel Wilson.
  *
- *  Uniform.h
+ *  LogCauchy.h
  *  Part of the gcat-core library.
  *
  *  The gcat-core library is free software: you can redistribute it and/or modify
@@ -16,27 +16,29 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with the gcat-core library. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef _UNIFORM_DISTRIBUTION_H_
-#define _UNIFORM_DISTRIBUTION_H_
+#ifndef _LOG_CAUCHY_DISTRIBUTION_H_
+#define _LOG_CAUCHY_DISTRIBUTION_H_
 #include <DAG/Distribution.h>
 #include <RandomVariables/Continuous.h>
 
 namespace gcat {
 
-class UniformDistribution : public Distribution {
+class LogCauchyDistribution : public Distribution {
+private:
+  const double PI;
 public:
 	// Constructor
-	UniformDistribution(string name="", DAG *dag=0);
+	LogCauchyDistribution(string name="", DAG *dag=0);
 	// Copy constructor
-	UniformDistribution(const UniformDistribution &x);
+	LogCauchyDistribution(const LogCauchyDistribution &x);
 	// Implementation of virtual function inherited from base class Distribution
 	bool check_random_variable_type(RandomVariable* random_variable);
 	// Implementation of virtual function inherited from base class
 	bool check_parameter_type(const int i, Variable* parameter);
-	void set_min(ContinuousVariable* min);
-	void set_max(ContinuousVariable* max);
-	ContinuousVariable const* get_min() const;
-	ContinuousVariable const* get_max() const;
+	void set_location(ContinuousVariable* location);
+	void set_scale(ContinuousVariable* scale);
+	ContinuousVariable const* get_location() const;
+	ContinuousVariable const* get_scale() const;
 	
 	// Compute log-likelihood
 	mydouble likelihood(const RandomVariable* rv, const Value* val);
@@ -45,5 +47,5 @@ public:
 } // namespace gcat
 
 
-#endif //_UNIFORM_DISTRIBUTION_H_
+#endif //_LOG_CAUCHY_DISTRIBUTION_H_
 

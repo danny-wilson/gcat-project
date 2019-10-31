@@ -176,6 +176,19 @@ public:
 	inverse_gamma_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
 };
 
+/*  <xs:element name="log_cauchy_distribution">
+ 		<xs:complexType>
+ 			<xs:attribute name="id" type="xs:string" use="required"/>
+ 			<xs:attribute name="location" type="xs:string" default="0.0"/>
+ 			<xs:attribute name="scale" type="xs:string" default="1.0"/>
+ 		</xs:complexType>
+	</xs:element>
+ */
+class log_cauchy_distribution_XMLParser : public DAGXMLParserTemplate<log_cauchy_distribution_XMLParser> {
+  public:
+  log_cauchy_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser);
+};
+
 /*	<xs:element name="log_normal_distribution">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:string" use="required"/>

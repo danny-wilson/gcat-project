@@ -28,6 +28,7 @@
 #include <Distributions/ImproperLogUniform.h>
 #include <Distributions/ImproperUniform.h>
 #include <Distributions/InverseGamma.h>
+#include <Distributions/LogCauchy.h>
 #include <Distributions/LogNormal.h>
 #include <Distributions/LogUniform.h>
 #include <Distributions/Normal.h>
@@ -263,6 +264,31 @@ inverse_gamma_distribution_XMLParser::inverse_gamma_distribution_XMLParser(const
 	getDAG()->assign_parameter_to_distribution(sattr[0],attrNames[2],sattr[2]);
 }
 
+log_cauchy_distribution_XMLParser::log_cauchy_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<log_cauchy_distribution_XMLParser>(master_parser,parent_parser) {
+  // Read in the attributes
+  const int nattr = 3;
+  const char* attrNames[nattr] = {"id","location","scale"};
+  vector<string> sattr = attributesToStrings(nattr,attrNames,attrs);
+  // a and b can be specified as numeric, in which case they must be instantiated as Variables
+  double double_location;
+  if(from_string<double>(double_location,sattr[1])) {
+    // Internally-generated name
+    sattr[1] = "_" + sattr[0] + "." + attrNames[1];
+    new ContinuousRV(sattr[1],getDAG(),double_location);
+    getDAG()->set_constant(sattr[1]);
+  }
+  double double_scale;
+  if(from_string<double>(double_scale,sattr[2])) {
+    // Internally-generated name
+    sattr[2] = "_" + sattr[0] + "." + attrNames[2];
+    new ContinuousRV(sattr[2],getDAG(),double_scale);
+    getDAG()->set_constant(sattr[2]);
+  }
+  new LogCauchyDistribution(sattr[0],getDAG());
+  getDAG()->assign_parameter_to_distribution(sattr[0],attrNames[1],sattr[1]);
+  getDAG()->assign_parameter_to_distribution(sattr[0],attrNames[2],sattr[2]);
+}
+
 log_normal_distribution_XMLParser::log_normal_distribution_XMLParser(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs, DAGXMLMasterParser* const master_parser, DAGXMLParser* const parent_parser) : DAGXMLParserTemplate<log_normal_distribution_XMLParser>(master_parser,parent_parser) {
 	// Read in the attributes
 	const int nattr = 3;
@@ -377,6 +403,7 @@ void LoadDistributionsXML() {
 	distributions_XMLParser::add_child("improper_log_uniform_distribution",&improper_log_uniform_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("improper_uniform_distribution",&improper_uniform_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("inverse_gamma_distribution",&inverse_gamma_distribution_XMLParser::factory);
+  distributions_XMLParser::add_child("log_cauchy_distribution",&log_cauchy_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("log_normal_distribution",&log_normal_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("log_uniform_distribution",&log_uniform_distribution_XMLParser::factory);
 	distributions_XMLParser::add_child("normal_distribution",&normal_distribution_XMLParser::factory);

@@ -54,6 +54,7 @@ GCAT_CORE_OBJECTS = \
 		./ImproperLogUniform.o\
 		./ImproperUniform.o\
 		./InverseGamma.o\
+		./LogCauchy.o\
 		./LogNormal.o\
 		./LogUniform.o\
 		./Normal.o\
@@ -185,6 +186,9 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 
 ./InverseGamma.o : src/Distributions/InverseGamma.cpp
 	$(CC) $(CC_OPTIONS) src/Distributions/InverseGamma.cpp -c $(INCLUDE) -o ./InverseGamma.o
+
+./LogCauchy.o : src/Distributions/LogCauchy.cpp
+	$(CC) $(CC_OPTIONS) src/Distributions/LogCauchy.cpp -c $(INCLUDE) -o ./LogCauchy.o
 
 ./LogNormal.o : src/Distributions/LogNormal.cpp
 	$(CC) $(CC_OPTIONS) src/Distributions/LogNormal.cpp -c $(INCLUDE) -o ./LogNormal.o

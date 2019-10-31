@@ -339,6 +339,14 @@
 		</xs:complexType>
 	</xs:element>
 
+	<xs:element name="log_cauchy_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="location" type="xs:string" default="0.0"/>
+			<xs:attribute name="scale" type="xs:string" default="1.0"/>
+		</xs:complexType>
+	</xs:element>
+
 	<xs:element name="log_normal_distribution" substitutionGroup="abstract_distribution">
 		<xs:complexType>
 			<xs:attribute name="id" type="xs:string" use="required"/>
