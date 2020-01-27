@@ -10,4 +10,4 @@ GCAT was originally designed for use on Unix-based operating systems including L
 
 Pre-compiled executable files and libraries are available for Download for Ubuntu 10.10 and Mac OSX Snow Leopard.
 
-For downloads visit https://code.google.com/archive/p/gcat-project/downloads
+For manual and downloads visit https://github.com/danny-wilson/gcat-project/releases
