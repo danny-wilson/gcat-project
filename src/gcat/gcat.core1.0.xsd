@@ -215,14 +215,6 @@
 		</xs:complexType>
 	</xs:element>
 	
-	<xs:element name="proportion_transformation" substitutionGroup="abstract_transformation">
-		<xs:complexType>
-			<xs:attribute name="id" type="xs:string" use="required"/>
-			<xs:attribute name="u" type="xs:string" use="required"/>
-			<xs:attribute name="v" type="xs:string" use="required"/>
-		</xs:complexType>
-	</xs:element>
-
 	<xs:element name="sum_transform" substitutionGroup="abstract_transformation">
 		<xs:complexType>
 			<xs:simpleContent>
