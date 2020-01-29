@@ -49,6 +49,7 @@ GCAT_CORE_OBJECTS = \
 		./Distribution_ContinuousMosaic.o\
 		./Distribution_ContinuousMosaicBetaMixture.o\
 		./Distribution_ContinuousMosaicMixture.o\
+		./Distribution_ContinuousVector.o\
 		./Gamma.o\
 		./ImproperBeta.o\
 		./ImproperLogUniform.o\
@@ -62,6 +63,7 @@ GCAT_CORE_OBJECTS = \
 		./DistributionsXML.o\
 		./gcatLibrary.o\
 		./ContinuousMosaicMoves.o\
+		./ContinuousVectorMoves.o\
 		./InferenceXML.o\
 		./MCMC.o\
 		./PowellML.o\
@@ -130,7 +132,7 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 ./DAG.o : src/DAG/DAG.cpp
 	$(CC) $(CC_OPTIONS) src/DAG/DAG.cpp -c $(INCLUDE) -o ./DAG.o
 
-./DAGreadXML.o : src/DAG/DAGreadXML.cpp
+./DAGreadXML.o : src/DAG/DAGreadXML.cpp  src/gcat/gcat.core1.0.xsd.h
 	$(CC) $(CC_OPTIONS) src/DAG/DAGreadXML.cpp -c $(INCLUDE) -o ./DAGreadXML.o
 
 ./DAGXMLParser.o : src/DAG/DAGXMLParser.cpp
@@ -168,6 +170,9 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 
 ./Distribution_ContinuousMosaicMixture.o : src/Distributions/ContinuousMosaicMixture.cpp
 	$(CC) $(CC_OPTIONS) src/Distributions/ContinuousMosaicMixture.cpp -c $(INCLUDE) -o ./Distribution_ContinuousMosaicMixture.o
+
+./Distribution_ContinuousVector.o : src/Distributions/ContinuousVector.cpp
+$(CC) $(CC_OPTIONS) src/Distributions/ContinuousVector.cpp -c $(INCLUDE) -o ./Distribution_ContinuousVector.o
 
 ./DistributionsXML.o : src/Distributions/DistributionsXML.cpp
 	$(CC) $(CC_OPTIONS) src/Distributions/DistributionsXML.cpp -c $(INCLUDE) -o ./DistributionsXML.o
@@ -210,6 +215,9 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 
 ./ContinuousMosaicMoves.o : src/Inference/MCMC/ContinuousMosaicMoves.cpp
 	$(CC) $(CC_OPTIONS) src/Inference/MCMC/ContinuousMosaicMoves.cpp -c $(INCLUDE) -o ./ContinuousMosaicMoves.o
+
+./ContinuousVectorMoves.o : src/Inference/MCMC/ContinuousVectorMoves.cpp
+$(CC) $(CC_OPTIONS) src/Inference/MCMC/ContinuousVectorMoves.cpp -c $(INCLUDE) -o ./ContinuousVectorMoves.o
 
 ./InferenceXML.o : src/Inference/InferenceXML.cpp
 	$(CC) $(CC_OPTIONS) src/Inference/InferenceXML.cpp -c $(INCLUDE) -o ./InferenceXML.o
@@ -280,6 +288,8 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 ./TransformationsXML.o : src/Transformations/TransformationsXML.cpp
 	$(CC) $(CC_OPTIONS) src/Transformations/TransformationsXML.cpp -c $(INCLUDE) -o ./TransformationsXML.o
 
+src/gcat/gcat.core1.0.xsd.h : src/gcat/gcat.core1.0.xsd
+(cd src/gcat && xxd -i gcat.core1.0.xsd > gcat.core1.0.xsd.h)
 
 #
 # Build the parts of gammaMap
