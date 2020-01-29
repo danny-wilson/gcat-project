@@ -172,7 +172,7 @@ libgammaMap.so : $(LIB_GAMMAMAP_OBJECTS) libgcat-core.so
 	$(CC) $(CC_OPTIONS) src/Distributions/ContinuousMosaicMixture.cpp -c $(INCLUDE) -o ./Distribution_ContinuousMosaicMixture.o
 
 ./Distribution_ContinuousVector.o : src/Distributions/ContinuousVector.cpp
-$(CC) $(CC_OPTIONS) src/Distributions/ContinuousVector.cpp -c $(INCLUDE) -o ./Distribution_ContinuousVector.o
+	$(CC) $(CC_OPTIONS) src/Distributions/ContinuousVector.cpp -c $(INCLUDE) -o ./Distribution_ContinuousVector.o
 
 ./DistributionsXML.o : src/Distributions/DistributionsXML.cpp
 	$(CC) $(CC_OPTIONS) src/Distributions/DistributionsXML.cpp -c $(INCLUDE) -o ./DistributionsXML.o
@@ -217,7 +217,7 @@ $(CC) $(CC_OPTIONS) src/Distributions/ContinuousVector.cpp -c $(INCLUDE) -o ./Di
 	$(CC) $(CC_OPTIONS) src/Inference/MCMC/ContinuousMosaicMoves.cpp -c $(INCLUDE) -o ./ContinuousMosaicMoves.o
 
 ./ContinuousVectorMoves.o : src/Inference/MCMC/ContinuousVectorMoves.cpp
-$(CC) $(CC_OPTIONS) src/Inference/MCMC/ContinuousVectorMoves.cpp -c $(INCLUDE) -o ./ContinuousVectorMoves.o
+	$(CC) $(CC_OPTIONS) src/Inference/MCMC/ContinuousVectorMoves.cpp -c $(INCLUDE) -o ./ContinuousVectorMoves.o
 
 ./InferenceXML.o : src/Inference/InferenceXML.cpp
 	$(CC) $(CC_OPTIONS) src/Inference/InferenceXML.cpp -c $(INCLUDE) -o ./InferenceXML.o
@@ -289,7 +289,7 @@ $(CC) $(CC_OPTIONS) src/Inference/MCMC/ContinuousVectorMoves.cpp -c $(INCLUDE) -
 	$(CC) $(CC_OPTIONS) src/Transformations/TransformationsXML.cpp -c $(INCLUDE) -o ./TransformationsXML.o
 
 src/gcat/gcat.core1.0.xsd.h : src/gcat/gcat.core1.0.xsd
-(cd src/gcat && xxd -i gcat.core1.0.xsd > gcat.core1.0.xsd.h)
+	(cd src/gcat && xxd -i gcat.core1.0.xsd > gcat.core1.0.xsd.h)
 
 #
 # Build the parts of gammaMap
