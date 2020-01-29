@@ -1,3 +1,5 @@
+gcat
+.*
 *.o
 *.so
 *.DS_Store
